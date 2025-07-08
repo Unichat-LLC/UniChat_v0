@@ -1,13 +1,10 @@
 import React from "react";
 
-
-const HomePage = () => {
+export function HomePage () {
 
     return (
         <div>
-
+            <p className="text-xl font-semibold">This is the Home Page</p>
         </div>
     )
 };
-
-export default HomePage
