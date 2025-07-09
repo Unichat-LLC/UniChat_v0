@@ -8,12 +8,12 @@ export function LandingPage () {
 
     return (
         <div className="grid max-w-screen-md mx-auto text-white grid-rows-[30%_1fr_20%] h-full gap-2">
-            <div className="row-start-1 flex self-end border border-slate-700">
+            <div className="row-start-1 flex self-end">
                 {/*<Header />*/}
             </div>
-            <div className="row-start-2  flex flex-col items-center px-6 border border-slate-700">
-                <h1 className="text-5xl">UChat</h1>
-                <p className="mt-4 text-2xl text-center">
+            <div className="row-start-2  flex flex-col items-center px-6 ">
+                <h1 className="text-7xl">UChat</h1>
+                <p className="mt-8 text-2xl text-center">
                     Collaborate Smarter. Learn Deeper. In Every Course.
                 </p>
                 <p className="mt-4 text-slate-400 text-md text-center">
@@ -48,7 +48,7 @@ export function LandingPage () {
             </div>
             
 
-            <div className="row-start-3 border border-slate-700">hi
+            <div className="row-start-3">
             </div>
         </div>
     )
