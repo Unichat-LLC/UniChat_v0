@@ -1,7 +1,9 @@
+import {  useNavigate } from "react-router-dom";
 
 
 
 export default function Header(){
+    const navigate = useNavigate();
     return (
         <header className="w-full">
             <div className="mx-auto px-6 py-4 flex items-center justify-between">
@@ -18,7 +20,7 @@ export default function Header(){
 
                 {/* Right: auth links */}
                 <div className="flex items-center gap-4">
-                    <a href="#" className="hover:underline text-lg">Login</a>
+                    <button onClick={() => navigate("/login")} className="hover:underline text-lg">Login</button>
                     <button className="flex text-white justify-center text-lg items-center gap-2 px-4 py-2 rounded-full bg-blue-500 font-semibold shadow-sm hover:bg-blue-600">
                         Contact us
                         <svg
