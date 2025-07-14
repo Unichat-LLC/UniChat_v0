@@ -1,6 +1,6 @@
 export default function DashboardComp(){
     return (
-        <div className="grid grid-cols-[20%_60%_20%] border grid-rows-[5%_1fr] h-screen">
+        <div className="grid grid-cols-[20%_60%_20%] border grid-rows-[5%_1fr] gap-1 h-screen">
             <div className="row-start-1 col-start-1 w-full border">
                 Profile
             </div>
