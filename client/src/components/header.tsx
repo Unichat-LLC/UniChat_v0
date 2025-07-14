@@ -21,7 +21,7 @@ export default function Header(){
                 {/* Right: auth links */}
                 <div className="flex items-center gap-4">
                     <button onClick={() => navigate("/login")} className="hover:underline text-lg">Login</button>
-                    <button className="flex text-white justify-center text-lg items-center gap-2 px-4 py-2 rounded-full bg-blue-500 font-semibold shadow-sm hover:bg-blue-600">
+                    <button className="flex text-white justify-center text-lg items-center gap-2 px-4 py-2 rounded-full bg-black font-semibold shadow-sm hover:bg-gray-800">
                         Contact us
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

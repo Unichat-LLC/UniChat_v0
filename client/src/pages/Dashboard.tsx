@@ -1,5 +1,4 @@
-import ChatDashboard from "../components/BoltDashboard";
-import DashboardComp from "../components/DashboardComp";
+import ChatDashboard from "../components/DashboardComp";
 
 export default function Dashboard() {
     return (

@@ -4,6 +4,7 @@ import Login from './pages/LoginPage'
 import MainLayout from './components/MainLayout'
 import Dashboard from './pages/Dashboard'
 import DashboardLayout from './components/DashboardLayout'
+import Profile from './pages/ProfilePage'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
         </Route>
         
         <Route path='/login' element={ <Login />} />
+        <Route path='/profile' element={ <Profile />} />
 
         {/* Dashboard elements layout */}
         <Route element={<DashboardLayout />}>
