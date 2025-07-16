@@ -1,5 +1,3 @@
-import {pool} from "../config/pool.js"
-
 import { hashPassword, query } from "../middleware/utils.js";
 
 export interface User {
