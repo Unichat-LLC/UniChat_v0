@@ -32,19 +32,11 @@ export const MessageModel = {
         return m;
     },
 
-    async getMsgById(groupId: number): Promise <Message | null>{
-        const [m] = await query<Message>(`
-                SELECT * FROM messages WHERE group_id = $1 ORDER BY uploaded_at ASC;
-            `, [groupId]);
 
-        return m ?? null;
-    },
-
-    async getMsgbyUser(senderId: number): Promise <Message | null>{
-        const [m] = await query<Message>(`
-                SELECT * FROM messages WHERE sender_id = $1 ORDER BY uploaded_at ASC;
-            `, [senderId]);
-        return m ?? null;
+    async getMsgbyUser(senderId: number): Promise <Message[]>{
+        return query<Message>(`
+            SELECT * FROM messages WHERE sender_id = $1 ORDER BY uploaded_at ASC;
+        `, [senderId]);
     },
 
     async deleteMsg(id: number): Promise <void> {

@@ -1,4 +1,5 @@
 import { query } from "../middleware/utils.js";
+import type { Message } from "./Message.js";
 
 export interface Group {
     id: number;
@@ -18,17 +19,16 @@ export interface GroupMember {
     joined_at: Date;
 }
 
-type newGroup = Pick<Group, "id" | "name" | "description">;
+type newGroup = Pick<Group,  "name" | "description">;
 type newGroupMember = Pick<GroupMember, "group_id" | "user_id" | "role">;
 
 export const GroupModel = {
 
     // Create group and group member
     async createGroup(data: newGroup): Promise<Group> {
-        const members = await this.getGroupMembersByGroup(data.id);
-        const params = [data.name, data.description, members];
+        const params = [data.name, data.description];
         const sql = `
-            INSERT INTO groups (name, description, members) VALUES ($1, $2, $3) RETURN name, description, members;
+            INSERT INTO groups (name, description) VALUES ($1, $2) RETURNING id, name, description, created_at, updated_at;
         `;
         const [group] = await query<Group>(sql, params);
         return group;
@@ -37,7 +37,7 @@ export const GroupModel = {
     async createGroupMember(data: newGroupMember): Promise<GroupMember> {
         const params = [data.group_id, data.user_id, data.role];
         const sql = `
-            INSERT INTO group_members (group_id, user_id, role) VALUES ($1, $2, $3) RETURN group_id, user_id, role;
+            INSERT INTO group_members (group_id, user_id, role) VALUES ($1, $2, $3) RETURN id, group_id, user_id, role, is_active, joined_at;
         `;
         const [groupMember] = await query<GroupMember>(sql, params);
         return groupMember;
@@ -46,30 +46,27 @@ export const GroupModel = {
     // Read functions
     async getGroupById(id: number): Promise<Group | null> {
         const [g] = await query<Group>(`
-                SELECT name, description, members FROM groups WHERE id = $1;
+                SELECT id, name, description, created_at, updated_at FROM groups WHERE id = $1;
             `, [id]);
         return g ?? null;
     },
     
     async getGroupByName(name: string): Promise<Group | null> {
         const [group] = await query<Group>(
-            `SELECT name, description FROM groups WHERE name = $1;`, [name]
+            `SELECT id, name, description, created_at, updated_at FROM groups WHERE name = $1;`, [name]
         );
         return group;
     },
 
-    async getGroupMessagesById(groupId: number): Promise<Group | null>{
-        const [messages] = await query<Group>(
-            `SELECT * FROM messages WHERE group_id = $1 ORDER BY uploaded_at ASC;`, [groupId]
-        );
-
-        return messages;
+    async getGroupMessagesById(groupId: number): Promise<Message[]> {
+        return query<Message>(`
+            SELECT * FROM messages WHERE group_id = $1 ORDER BY uploaded_at ASC;
+        `, [groupId]);
     },
 
-    async getGroupMembersByGroup(groupId: number): Promise<GroupMember | null> {
-        const [members] = await query<GroupMember>(
-            `SELECT * FROM group_members WHERE group_id = $1;`
-        ,[groupId]);
-        return members;
+    async getGroupMembersByGroup(groupId: number): Promise<GroupMember[]> {
+        return query<GroupMember>(`
+            SELECT * FROM group_members WHERE group_id = $1;
+        `, [groupId]);
     }
 }
