@@ -18,7 +18,7 @@ export const UserModel = {
     async createUser(data: NewUser): Promise<User> {
         const hash = await hashPassword(data.password);
         const sql = `
-            INSERT INTO Users (username, email, name, password_hash, bio, university)
+            INSERT INTO users (username, email, name, password_hash, bio, university)
             VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING id, username, email, name, bio, university, created_at;
         `;
