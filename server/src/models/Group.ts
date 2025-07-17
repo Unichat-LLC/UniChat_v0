@@ -1,4 +1,5 @@
 import { query } from "../middleware/utils.js";
+import { io } from "../server.js";
 import type { Message } from "./Message.js";
 
 export interface Group {
@@ -50,6 +51,7 @@ export const GroupModel = {
     ): Promise<Group> {
         // create group
         const group = await this.createGroup(groupData);
+        
 
         // add owner as first member
         await this.createGroupMember({
@@ -57,6 +59,7 @@ export const GroupModel = {
             user_id: userId,
             role: "owner"
         });
+        io.to(`group-${group.id}`).emit("userJoined", { userId });
 
         return group;
     },

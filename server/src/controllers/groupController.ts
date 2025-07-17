@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { GroupModel } from "../models/Group.js";
+import { io, userSocketMap } from "../server.js";
 
 export const createGroup = async (req: Request, res: Response) => {
     const userId = req.user!.id;
@@ -23,6 +24,14 @@ export const leaveGroup = async (req: Request, res: Response) => {
     const groupId = req.group!.id;
 
     await GroupModel.removeMember(groupId, userId);
+
+    const socketId = userSocketMap[userId];
+    if (socketId) {
+        const socket = io.sockets.sockets.get(socketId);
+        socket?.leave(`group-${groupId}`);
+    }
+
+    io.to(`group-${groupId}`).emit("userLeft", { userId });
 
     res.json({ message: "You have left the group." });
 };
