@@ -62,10 +62,13 @@ app.get("/", async (_req: Request, res: Response) => {
 });
 
 
-//auth routes
+//public routes
 app.post("/api/signup", signup);
 app.post("/api/login", login);
-app.post("/api/logout", logout);
+
+//protected routes
+app.post("/api/logout", requireAuth, logout);
+
 
 //example protected route
 app.get("/api/me", requireAuth, (req: Request, res: Response) => {

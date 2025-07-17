@@ -21,6 +21,7 @@ export interface GroupMember {
 
 type newGroup = Pick<Group,  "name" | "description">;
 type newGroupMember = Pick<GroupMember, "group_id" | "user_id" | "role">;
+type updateGroup = Partial<Omit<Group, "id" | "created_at" | "members" | "updated_at">>;
 
 export const GroupModel = {
 
@@ -68,5 +69,34 @@ export const GroupModel = {
         return query<GroupMember>(`
             SELECT * FROM group_members WHERE group_id = $1;
         `, [groupId]);
+    },
+
+    // Update methods
+    async updateGroup(id: number, data: updateGroup): Promise<Group | null> {
+        const fields = [];
+        const values: any[] = [];
+        let i = 1;
+
+        for (const [key,value] of Object.entries(data)){
+            fields.push(`${key} = $${i++}`);
+            values.push(value);
+        }
+
+        if(fields.length === 0) {
+            return this.getGroupById(id);
+        }
+
+        const sql = `
+            UPDATE groups
+            SET ${fields.join(', ')}, updated_at = now()
+            WHERE id = $${i}
+            RETURNING id, name, description, created_at, updated_at;
+        `;
+
+        values.push(id);
+
+        const [group] = await query<Group>(sql, values);
+        return group ?? null;
     }
+
 }

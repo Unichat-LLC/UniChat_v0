@@ -41,6 +41,41 @@ export const UserModel = {
         return u ?? null;
     },
 
+    async updateUser(id: number, data: UpdateUser): Promise<User | null>{
+        const fields = [];
+        const values: any[] = [];
+        let i = 1;
+
+        for (const [key,value] of Object.entries(data)){
+            fields.push(`${key} = $${i++}`);
+            values.push(value);
+        }
+
+        if(fields.length === 0) {
+            return this.findById(id);
+        }
+
+        const sql = `
+            UPDATE users
+            SET ${fields.join(', ')}
+            WHERE id = $${i}
+            RETURNING id, username, email, name, bio, university, created_at;
+        `;
+
+        values.push(id);
+
+        const [user] = await query<User>(sql, values);
+        return user ?? null;
+    },
+
+    async updatePassword(id: number, newPassword: string): Promise<void> {
+        const hash = await hashPassword(newPassword);
+        await query(
+            `UPDATE users SET password_hash = $1 WHERE id = $2`,
+            [hash, id]
+        );
+    },
+
     async remove(id: number): Promise<void>{
         await query(`DELETE FROM users WHERE id = $1;`, [id]);
     },
