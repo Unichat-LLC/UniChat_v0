@@ -4,6 +4,11 @@ import "dotenv/config";
 import cors from "cors";
 import http from "http";
 import { Server, Socket } from "socket.io";
+import { signup, login, logout } from "./controllers/userController.js";
+import { requireAuth } from "./middleware/auth.js";
+import cookieParser from "cookie-parser";
+
+
 
 const app = express();
 const server = http.createServer(app);
@@ -48,10 +53,23 @@ app.use(
   })
 );
 
+app.use(cookieParser());
+
 app.use(express.json());
 
 app.get("/", async (_req: Request, res: Response) => {
   res.send("Hello world");
+});
+
+
+//auth routes
+app.post("/api/signup", signup);
+app.post("/api/login", login);
+app.post("/api/logout", logout);
+
+//example protected route
+app.get("/api/me", requireAuth, (req: Request, res: Response) => {
+  res.json({ user: req.user });
 });
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

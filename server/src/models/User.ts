@@ -43,5 +43,13 @@ export const UserModel = {
 
     async remove(id: number): Promise<void>{
         await query(`DELETE FROM users WHERE id = $1;`, [id]);
+    },
+    
+    async getPasswordHash(id: number): Promise<string | null> {
+        const [u] = await query<{ password_hash: string }>(
+            `SELECT password_hash FROM users WHERE id = $1`,
+            [id]
+        );
+        return u?.password_hash ?? null;
     }
 }

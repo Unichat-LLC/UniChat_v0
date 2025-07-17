@@ -1,0 +1,43 @@
+import { query } from "../middleware/utils.js";
+
+export interface Session {
+    id: number;
+    user_id: number;
+    session_token: string;
+    created_at: Date;
+    expires_at: Date;
+}
+
+
+/*NOTE: CREATE TABLE sessions (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  session_token UUID NOT NULL UNIQUE,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  expires_at TIMESTAMPTZ
+);*/
+
+export const SessionModel = {
+    async create(userId: number, expiresAt: Date): Promise<Session>{
+        const [s] = await query<Session>(
+            `INSERT INTO sesions (user_id, session_token, expires_at)
+            VALUES ($1, gen_random_uuid(), $2)
+            RETURNING *;`, [userId, expiresAt]
+        );
+        return s;
+    },
+
+    async findByToken(token: string): Promise<Session | null>{
+        const [s] = await query<Session>(`
+        SELECT * FROM sessions WHERE session_token = $1 AND expires_at > now();
+        `, [token]);
+        return s ?? null;
+    },
+
+    async delete(token: string): Promise<void> {
+        await query(`DELETE FROM sessions WHERE session_token = $1`, [token]);
+    }
+
+
+    //NOTE: CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+};
