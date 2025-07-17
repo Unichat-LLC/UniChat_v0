@@ -60,3 +60,18 @@ export const logout = async(req: Request, res: Response) => {
     }
     res.json({message: "Logged out"});
 }
+
+export const updateProfile = async(req: Request, res: Response) => {
+    const id = req.user!.id;
+    const {username, email, name, bio, university, password} = req.body; //Get the contents of the profile page if decided to update
+
+    const user = await UserModel.updateUser(id, {username, email, name, bio, university} );
+
+    let passwordUpdated = false;
+    if (password) {
+        await UserModel.updatePassword(id, password);
+        passwordUpdated = true;
+    }
+    res.json({user, passwordUpdated});
+}
+

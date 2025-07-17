@@ -4,7 +4,7 @@ import "dotenv/config";
 import cors from "cors";
 import http from "http";
 import { Server, Socket } from "socket.io";
-import { signup, login, logout } from "./controllers/userController.js";
+import { signup, login, logout, updateProfile } from "./controllers/userController.js";
 import { requireAuth } from "./middleware/auth.js";
 import cookieParser from "cookie-parser";
 
@@ -68,6 +68,7 @@ app.post("/api/login", login);
 
 //protected routes
 app.post("/api/logout", requireAuth, logout);
+app.patch("/api/profile", requireAuth, updateProfile);
 
 
 //example protected route
