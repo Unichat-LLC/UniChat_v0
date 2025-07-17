@@ -10,6 +10,7 @@ import cookieParser from "cookie-parser";
 import { requireGroup } from "./middleware/utils.js";
 import { getGroupMembers, getMessages, getUserMessages, sendMessage } from "./controllers/messageController.js";
 import { createGroup, leaveGroup } from "./controllers/groupController.js";
+import { GroupModel } from "./models/Group.js";
 
 
 
@@ -26,19 +27,29 @@ export const io = new Server(server, {
 export const userSocketMap: Record<string, string> = {};
 
 // connection handler
-io.on("connection", (socket: Socket) => {
+io.on("connection", async(socket: Socket) => {
   // handshake.query is Record<string, unknown>; cast it:
   const { userId } = socket.handshake.query as { userId?: string };
   console.log("User connected:", userId);
 
-  if (userId) userSocketMap[userId] = socket.id;
+  if (!userId) {
+    socket.disconnect();
+    return;
+  }
+
+  userSocketMap[userId] = socket.id;
+
+  // Find all the groups user belongs to
+  const groups = await GroupModel.getGroupsForUser(Number(userId));
+  groups.forEach(group => {
+      socket.join(`group-${group.id}`);
+  });
 
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
   socket.on("disconnect", () => {
-    console.log("User disconnected:", userId);
-    if (userId) delete userSocketMap[userId];
-    io.emit("getOnlineUsers", Object.keys(userSocketMap));
+      delete userSocketMap[userId];
+      io.emit("getOnlineUsers", Object.keys(userSocketMap));
   });
 });
 

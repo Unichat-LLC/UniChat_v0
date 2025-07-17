@@ -87,6 +87,17 @@ export const GroupModel = {
             SELECT * FROM group_members WHERE group_id = $1;
         `, [groupId]);
     },
+    
+    async getGroupsForUser(userId: number): Promise<Group[]> {
+        return query<Group>(
+            `SELECT g.id, g.name, g.description, g.created_at, g.updated_at
+            FROM groups g
+            JOIN group_members gm ON g.id = gm.group_id
+            WHERE gm.user_id = $1`,
+            [userId]
+        );
+    },
+
 
     // Update methods
     async updateGroup(id: number, data: updateGroup): Promise<Group | null> {
