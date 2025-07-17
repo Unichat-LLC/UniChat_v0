@@ -44,6 +44,23 @@ export const GroupModel = {
         return groupMember;
     },
 
+    async createGroupWithOwner(
+        groupData: newGroup,
+        userId: number
+    ): Promise<Group> {
+        // create group
+        const group = await this.createGroup(groupData);
+
+        // add owner as first member
+        await this.createGroupMember({
+            group_id: group.id,
+            user_id: userId,
+            role: "owner"
+        });
+
+        return group;
+    },
+
     // Read functions
     async getGroupById(id: number): Promise<Group | null> {
         const [g] = await query<Group>(`
@@ -61,7 +78,7 @@ export const GroupModel = {
 
     async getGroupMessagesById(groupId: number): Promise<Message[]> {
         return query<Message>(`
-            SELECT * FROM messages WHERE group_id = $1 ORDER BY uploaded_at DSC;
+            SELECT * FROM messages WHERE group_id = $1 ORDER BY uploaded_at DESC;
         `, [groupId]);
     },
 
@@ -97,6 +114,12 @@ export const GroupModel = {
 
         const [group] = await query<Group>(sql, values);
         return group ?? null;
-    }
+    },
 
+    async removeMember(groupId: number, userId: number): Promise<void> {
+        await query(
+            `DELETE FROM group_members WHERE group_id = $1 AND user_id = $2`,
+            [groupId, userId]
+        );
+    }
 }

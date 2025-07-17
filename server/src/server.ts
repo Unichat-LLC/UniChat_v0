@@ -7,6 +7,9 @@ import { Server, Socket } from "socket.io";
 import { signup, login, logout, updateProfile } from "./controllers/userController.js";
 import { requireAuth } from "./middleware/auth.js";
 import cookieParser from "cookie-parser";
+import { requireGroup } from "./middleware/utils.js";
+import { getGroupMembers, getMessages, getUserMessages, sendMessage } from "./controllers/messageController.js";
+import { createGroup, leaveGroup } from "./controllers/groupController.js";
 
 
 
@@ -70,6 +73,15 @@ app.post("/api/login", login);
 app.post("/api/logout", requireAuth, logout);
 app.patch("/api/profile", requireAuth, updateProfile);
 
+//group related
+app.get("/api/groups/:groupId/members", requireAuth, requireGroup, getGroupMembers);
+app.post("/api/groups", requireAuth, createGroup);
+app.delete("/api/groups/:groupId/leave", requireAuth, requireGroup, leaveGroup);
+
+//message related
+app.post("/api/groups/:groupId/messages", requireAuth, requireGroup, sendMessage);
+app.get("/api/groups/:groupId/messages", requireAuth, requireGroup, getMessages);
+app.get("/api/my/messages", requireAuth, getUserMessages);
 
 //example protected route
 app.get("/api/me", requireAuth, (req: Request, res: Response) => {

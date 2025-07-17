@@ -29,12 +29,12 @@ export const getUserMessages = async(req: Request, res: Response) => {
 
 // send a message in a group
 export const sendMessage = async(req: Request, res: Response) => {
-    const message = req.body;
-    const newMessage = await MessageModel.createMessage(message);
-    let messageSent = false;
-    if(newMessage){
-        messageSent = true;
-    }
-
-    res.json({newMessage, messageSent})
+    const { message } = req.body;
+    const newMessage = await MessageModel.createMessage({
+        group_id: req.group!.id,
+        sender_id: req.user!.id,
+        message,
+    });
+    
+    res.json({newMessage})
 }
