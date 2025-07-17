@@ -2,6 +2,7 @@ import { MessageModel } from "../models/Message.js";
 import { SessionModel } from "../models/Session.js";
 import { GroupModel } from "../models/Group.js";
 import { Request, Response } from "express";
+import { io } from "../server.js";
 
 // Get all users in a group
 export const getGroupMembers = async(req: Request, res: Response) => {
@@ -36,5 +37,6 @@ export const sendMessage = async(req: Request, res: Response) => {
         message,
     });
     
+    io.to(`group-${req.group!.id}`).emit("newMessage", newMessage)
     res.json({newMessage})
 }
