@@ -44,8 +44,6 @@ interface OnlineUser {
   avatar?: string;
 }
 
-
-
 const ChatDashboard: React.FC = () => {
   const [activeClass, setActiveClass] = useState('CS101');
   const [message, setMessage] = useState('');

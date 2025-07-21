@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useState, useEffect, type ReactNode} from "react";
+import {createContext, useContext, useState, useEffect, type ReactNode} from "react";
 import { api } from "../services/api";
 
 interface User {
@@ -20,10 +20,21 @@ export interface SignupData {
   password: string;
 }
 
+export interface UpdateProfileData {
+  username?: string;
+  email?: string;
+  name?: string;
+  bio?: string;
+  university?: string;
+  password?: string;
+}
+
+
 interface AuthContext {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
   signup: (data: SignupData) => Promise<void>;
+  updateProfile: (data: UpdateProfileData) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -53,13 +64,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser(res.data.user);
     }
 
+    const updateProfile = async(data: UpdateProfileData) => {
+      const res = await api.patch("/profile", data);
+      setUser(res.data.user);
+    }
+
     const logout = async () => {
         await api.post("/logout");
         setUser(null);
     };
 
 
-    return <AuthContext.Provider value={{user, login, signup, logout}}>
+    return <AuthContext.Provider value={{user, login, signup, updateProfile, logout}}>
         {children}
     </AuthContext.Provider>
 }

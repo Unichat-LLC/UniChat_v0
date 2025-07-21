@@ -2,7 +2,6 @@ import { ArrowLeft, Camera, Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import placeholder from "../assets/placeholder.png";
 import React, {useState, useEffect, type FormEvent } from "react";
-import { api } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
 interface MockClass {
@@ -20,7 +19,7 @@ const mockClasses: MockClass[] = [
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
-  const {user, logout} = useAuth();
+  const {user, updateProfile, logout} = useAuth();
 
   const [form, setForm] = useState({
     username: "",
@@ -52,7 +51,7 @@ const Profile: React.FC = () => {
     setSaving(true);
     setFeedback("");
     try{
-      const res = await api.patch("/profile", form);
+      await updateProfile(form);
       setFeedback("Profile updated!");
     }catch {
       setFeedback("Failed to update profile");
