@@ -1,16 +1,65 @@
-import { ArrowLeft, Badge, Camera, Edit } from "lucide-react";
+import { ArrowLeft, Camera, Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import placeholder from "../assets/placeholder.png";
+import React, {useState, useEffect, type FormEvent } from "react";
+import { api } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 
-const Profile = () => {
+interface MockClass {
+  id: number;
+  name: string;
+  role: "student" | "professor";
+}
+
+const mockClasses: MockClass[] = [
+  { id: 1, name: "Computer Science 101", role: "student" },
+  { id: 2, name: "Data Structures", role: "student" },
+  { id: 3, name: "Web Development", role: "professor" },
+  { id: 4, name: "Machine Learning", role: "student" },
+];
+
+const Profile: React.FC = () => {
   const navigate = useNavigate();
+  const {user, logout} = useAuth();
 
-  const mockClasses = [
-    { id: 1, name: "Computer Science 101", role: "student" },
-    { id: 2, name: "Data Structures", role: "student" },
-    { id: 3, name: "Web Development", role: "professor" },
-    { id: 4, name: "Machine Learning", role: "student" },
-  ];
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    bio: "",
+    university: "",
+  });
+  const [saving, setSaving] = useState(false);
+  const [feedback, setFeedback] = useState("");
+
+  // populate form when user is loaded
+  useEffect(() => {
+    if(user){
+      setForm({
+        username: user.username,
+        email: user.email,
+        bio: user.bio,
+        university: user.university,
+      });
+    }
+  }, [user])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm(prev => ({...prev, [e.target.name]: e.target.value}));
+  };
+
+  const handleSave = async(e: FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    setFeedback("");
+    try{
+      const res = await api.patch("/profile", form);
+      setFeedback("Profile updated!");
+    }catch {
+      setFeedback("Failed to update profile");
+    }finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50  text-gray-800">
@@ -29,7 +78,7 @@ const Profile = () => {
       </div>
 
       {/* Content */}
-      <div className="p-6 max-w-4xl mx-auto">
+      <form onSubmit={handleSave} className="p-6 max-w-4xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Profile Picture Card */}
           <div className="lg:col-span-1 bg-white px-6 py-10 rounded-lg shadow-sm">
@@ -72,7 +121,9 @@ const Profile = () => {
                   </label>
                   <input
                     id="username"
-                    defaultValue="John Doe"
+                    name="username"
+                    value={form.username}
+                    onChange={handleChange}
                     className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring focus:ring-gray-300"
                   />
                 </div>
@@ -82,8 +133,10 @@ const Profile = () => {
                   </label>
                   <input
                     id="email"
+                    name="email"
                     type="email"
-                    defaultValue="john.doe@university.edu"
+                    value={form.email}
+                    onChange={handleChange}
                     className="w-full mt-1 px-3 py-2 border border-gray-300  rounded-lg text-sm focus:ring focus:ring-gray-300"
                   />
                 </div>
@@ -94,37 +147,39 @@ const Profile = () => {
                 </label>
                 <textarea
                   id="bio"
+                  name="bio"
                   rows={3}
+                  value={form.bio}
+                  onChange={handleChange}
                   className="w-full mt-1 px-3 py-2 border border-gray-300  rounded-lg text-sm focus:ring focus:ring-black"
-                  defaultValue="Computer Science student passionate about web development and machine learning. Always eager to learn new technologies and collaborate on interesting projects."
                 />
               </div>
             </div>
           </div>
 
           {/* Classes Card */}
-          <div className="lg:col-span-3 bg-white px-6 py-10 rounded-lg shadow-sm min-h-72">
+          <div className="lg:col-span-3 bg-white px-6 py-10 rounded-lg shadow-sm">
             <h2 className="font-medium mb-4">Your Classes</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {mockClasses.map((classItem) => (
+              {mockClasses.map(ci => (
                 <div
-                  key={classItem.id}
-                  className="p-4 border border-gray-300  rounded-lg bg-gray-50 hover:bg-gray-100 transition"
+                  key={ci.id}
+                  className="p-4 border border-gray-300 rounded-lg bg-gray-50 hover:bg-gray-100 transition"
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <h3 className="font-medium text-sm">{classItem.name}</h3>
+                    <h3 className="font-medium text-sm">{ci.name}</h3>
                     <span
                       className={`text-xs px-2 py-1 rounded-full ${
-                        classItem.role === "professor"
+                        ci.role === "professor"
                           ? "bg-black text-white"
                           : "bg-gray-200 text-gray-700"
                       }`}
                     >
-                      {classItem.role}
+                      {ci.role}
                     </span>
                   </div>
                   <p className="text-xs text-gray-500">
-                    {classItem.role === "professor" ? "Teaching" : "Enrolled"}
+                    {ci.role === "professor" ? "Teaching" : "Enrolled"}
                   </p>
                 </div>
               ))}
@@ -133,12 +188,26 @@ const Profile = () => {
         </div>
 
         {/* Save Button */}
-        <div className="flex justify-end mt-6">
-          <button className="px-4 py-2 bg-black text-sm text-white rounded-lg hover:bg-gray-800">
-            Save Changes
+        <div className="flex justify-between items-center mt-6">
+          <button
+            type="button"
+            onClick={async () => { await logout(); navigate("/login", { replace: true }); }}
+            className="text-sm text-red-600 hover:underline"
+          >
+            Log out
           </button>
+          <div className="flex items-center gap-4">
+            {feedback && <span className="text-sm text-green-600">{feedback}</span>}
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-4 py-2 bg-black text-sm text-white rounded-lg hover:bg-gray-800 disabled:opacity-50"
+            >
+              {saving ? "Saving…" : "Save Changes"}
+            </button>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

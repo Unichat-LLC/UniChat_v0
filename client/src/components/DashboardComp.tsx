@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Search, 
   Settings, 
@@ -10,16 +10,16 @@ import {
   Send, 
   Paperclip, 
   Smile,
-  UserCircle,
   Volume2,
-  BookOpen,
-  Clock,
   MessageCircle,
   ArrowRightFromLine
 } from 'lucide-react';
 
 import placeholder from '../assets/placeholder.png';
 import { useNavigate } from 'react-router-dom';
+import { getSocket } from '../lib/socket';
+import { api } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 interface Message {
   id: string;
@@ -51,50 +51,13 @@ const ChatDashboard: React.FC = () => {
   const [message, setMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const classes: Class[] = [
-    { id: 'CS101', name: 'Computer Science 101', channel: "#general", unread: 3, isActive: true },
-    { id: 'MATH201', name: 'Calculus II', channel: "#homework-help", unread: 0, isActive: false },
-    { id: 'PHYS101', name: 'Physics Fundamentals', channel: "#lab-reports", unread: 7, isActive: false },
-    { id: 'ENG102', name: 'English Composition', channel: "#discussions", unread: 1, isActive: false },
-    { id: 'HIST150', name: 'World History', channel: "#study-group", unread: 0, isActive: false },
-  ];
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [classes, setClasses] = useState<Class[]>([]);
+  const socket = getSocket();
+
+ const { user, logout } = useAuth();
 
   const navigate = useNavigate();
-
-  const messages = [
-    {
-      id: 1,
-      user: "Alex Chen",
-      avatar: placeholder,
-      message: "Hey everyone! Did anyone finish the assignment for tomorrow?",
-      time: "10:30 AM",
-      isOwn: false,
-    },
-    {
-      id: 2,
-      user: "Sarah Johnson",
-      avatar: placeholder,
-      message: "I'm still working on question 3. The algorithm is pretty complex.",
-      time: "10:32 AM",
-      isOwn: false,
-    },
-    {
-      id: 3,
-      user: "You",
-      avatar: placeholder,
-      message: "I can help with that! Let me share my approach to the problem.",
-      time: "10:35 AM",
-      isOwn: true,
-    },
-    {
-      id: 4,
-      user: "Mike Davis",
-      avatar: placeholder,
-      message: "That would be great! I'm struggling with the time complexity analysis.",
-      time: "10:36 AM",
-      isOwn: false,
-    },
-  ];
 
   const onlineUsers: OnlineUser[] = [
     { id: '1', name: 'Sarah Chen', status: 'online' },
@@ -106,17 +69,12 @@ const ChatDashboard: React.FC = () => {
     { id: '7', name: 'Lisa Thompson', status: 'away' },
   ];
 
-  const recentActivity = [
-    { action: 'New assignment posted', class: 'CS101', time: '1h ago' },
-    { action: 'Study group created', class: 'MATH201', time: '3h ago' },
-    { action: 'Reminder: Quiz tomorrow', class: 'PHYS101', time: '5h ago' },
-  ];
 
-  const handleSendMessage = () => {
-    if (message.trim()) {
-      // Handle message sending logic here
-      setMessage('');
-    }
+  const handleSendMessage = async () => {
+    if (!message.trim() || !activeClass) return;
+    const res = await api.post(`/groups/${activeClass}/messages`, { message });
+    setMessages(m => [res.data.newMessage, ...m]);
+    setMessage("");
   };
 
   const getStatusColor = (status: string) => {
@@ -128,10 +86,33 @@ const ChatDashboard: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    socket.on("newMessage", (msg) => {
+      setMessages(m => [msg, ...m]);
+    });
+    return () => {
+      socket.off("newMessage");
+    };
+  }, [socket])
+
+    useEffect(() => {
+    api.get("/groups").then(r => {
+      setClasses(r.data.groups);
+      // default select the first group.id
+      setActiveClass(r.data.groups[0].id);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (activeClass == null) return;
+    api.get(`/groups/${activeClass}/messages`)
+      .then(r => setMessages(r.data.groupMessages));
+  }, [activeClass]);
+
   return (
     <div className="h-screen bg-white flex">
       {/* Left Sidebar - 20% */}
-      <div className="w-17/100 bg-gray-50 border-r border-gray-200 flex flex-col">
+      <div className="w-1/5 bg-gray-50 border-r border-gray-200 flex flex-col">
         {/* University Header */}
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center space-x-2">
@@ -150,12 +131,12 @@ const ChatDashboard: React.FC = () => {
           </div>
             
           <div className=" space-y-2">
-            {classes.map((classItem) => (
+            {classes.map((c => (
               <div
-                key={classItem.id}
-                onClick={() => setActiveClass(classItem.id)}
+                key={c.id}
+                onClick={() => setActiveClass(c.id)}
                 className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                  classItem.isActive
+                  c.id === activeClass
                     ? 'bg-gray-200 text-black'
                     : 'hover:bg-gray-100 text-black'
                 }`}
@@ -164,20 +145,23 @@ const ChatDashboard: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     <Hash className="w-4 h-4" />
                     <div className='flex flex-col '>
-                      <span className="font-medium text-sm">{classItem.name}</span>
-                      <span className='text-[0.7rem] text-gray-600'>{classItem.channel}</span>
+                      <span className="font-medium text-sm">{c.name}</span>
+                      <span className='text-[0.7rem] text-gray-600'>{c.channel}</span>
                     </div>
                     
                   </div>
-                  {classItem.unread > 0 && (
+                  {c.unread > 0 && (
                     <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
-                      {classItem.unread}
+                      {c.unread}
                     </span>
                   )}
                 </div>
               </div>
-            ))}
+            )))}
           </div>
+          <button onClick={async () => { await logout(); navigate("/login", { replace: true }); }}>
+            <ArrowRightFromLine/>
+          </button>
         </div>
 
         {/* Settings Button */}
@@ -190,7 +174,7 @@ const ChatDashboard: React.FC = () => {
       </div>
 
       {/* Main Chat Area - 66% */}
-      <div className="w-66/100 flex flex-col">
+      <div className="flex-1 flex flex-col">
         {/* Header - 10% of column height */}
         <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
           <div className="flex items-center space-x-4">
@@ -227,34 +211,44 @@ const ChatDashboard: React.FC = () => {
         <div className="flex-1 overflow-hidden">
           <div className="h-full">
             <div className="p-6 space-y-4">
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`flex gap-3 ${message.isOwn ? 'flex-row-reverse' : ''}`}
-                >
-                  <div className="h-8 w-8">
-                    <img src={message.avatar} />
-                  </div>
-                  <div className={`flex flex-col ${message.isOwn ? 'items-end' : 'items-start'} max-w-[70%]`}>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-md text-black">{message.user}</span>
-                      <span className="text-xs text-black">{message.time}</span>
-                    </div>
+              {messages.map(message => {
+                const isOwn = message.user === user?.username;
+                return (
+                  <div
+                    key={message.id}
+                    className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}
+                  >
+                    <img
+                      src={message.avatar ?? placeholder}
+                      alt={`${message.user} avatar`}
+                      className="h-8 w-8 rounded-full"
+                    />
                     <div
-                      className={`p-3 rounded-lg ${
-                        message.isOwn
-                          ? 'bg-black text-white'
-                          : 'bg-gray-100 text-black'
-                      }`}
+                      className={`flex flex-col ${isOwn ? 'items-end' : 'items-start'} max-w-[70%]`}
                     >
-                      <p className="text-[0.85rem]">{message.message}</p>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium text-black">
+                          {message.user}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {message.timestamp}
+                        </span>
+                      </div>
+                      <div
+                        className={`p-3 rounded-lg ${
+                          isOwn ? 'bg-black text-white' : 'bg-gray-100 text-black'
+                        }`}
+                      >
+                        <p className="text-[0.85rem]">{message.content}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
+
 
         {/* Message Input - 10% of column height */}
         <div className="p-4 border-t border-gray-200">
@@ -286,7 +280,7 @@ const ChatDashboard: React.FC = () => {
       </div>
 
       {/* Right Sidebar - 20% */}
-      <div className="w-17/100 bg-gray-50 border-l border-gray-200 flex flex-col">
+      <div className="w-1/5 bg-gray-50 border-l border-gray-200 flex flex-col">
         {/* User Profile */}
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">

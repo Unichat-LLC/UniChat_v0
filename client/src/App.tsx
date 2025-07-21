@@ -5,26 +5,31 @@ import MainLayout from './components/MainLayout'
 import Dashboard from './pages/Dashboard'
 import DashboardLayout from './components/DashboardLayout'
 import Profile from './pages/ProfilePage'
+import ProtectedRoute from './components/ProtectedRoute'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<MainLayout />}>
-          <Route index element={ <LandingPage />} />
-        </Route>
-        
-        <Route path='/login' element={ <Login />} />
-        <Route path='/profile' element={ <Profile />} />
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route index element={ <LandingPage />} />
+          </Route>
+          
+          <Route path='/login' element={ <Login />} />
+          {/* profile is protected */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="profile" element={<Profile />} />
 
-        {/* Dashboard elements layout */}
-        <Route element={<DashboardLayout />}>
-          <Route path='/dashboard' element={<Dashboard />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-    
+              <Route element={<DashboardLayout />}>
+                <Route path="dashboard" element={<Dashboard />} />
+              </Route>
+            </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider> 
   )
 }
 
