@@ -6,7 +6,7 @@ export default function Header(){
     const navigate = useNavigate();
     return (
         <header className="w-full">
-            <div className="mx-auto px-6 py-4 flex items-center justify-between">
+            <div className="mx-auto bg-gray-50 px-6 py-4 flex items-center justify-between">
                 {/* Left: logo + nav links */}
                 <div className="flex items-center gap-16">
                     <div className="font-bold text-xl">Unichat</div>
