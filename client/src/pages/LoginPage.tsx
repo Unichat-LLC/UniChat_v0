@@ -53,155 +53,219 @@ export default function Login(){
     }
     
     return (
-        <div className="font-sans-serif bg-gray-50 h-screen">
-            <div className="flex flex-col gap-4 justify-center items-center w-full outline-2 max-w-6xl mx-auto h-full outline-slate-200 outline-offset-2 outline-dashed">
-                <h1 className="text-5xl">Unichat</h1>
-                {authOption === "login" && (<p className="text-2xl">Sign in to your account</p>)}
-                <div className="p-10 border border-gray-200 rounded-xl bg-white shadow-md">
-                    {authOption === "login" && (
-                        <form onSubmit={onSubmit} className="grid grid-cols-2 min-w-sm grid-rows-[25%_25%_10%_1fr] gap-5 ">
-                            <div className="row-start-1 col-span-2 flex flex-col items-start ">
-                                <p className="pb-2">Username/Email</p>
-                                <input type="email" value={email} onChange={e => setEmail(e.target.value)} 
-                                    className="w-full border border-slate-200 p-2 rounded-lg" required />
+        
+        <div className="min-h-screen bg-white flex items-center justify-center p-4">
+            <div className="w-full max-w-6xl mx-auto">
+                <div className="text-center mb-8">
+                    <h1 className="text-6xl font-bold text-black mb-4">
+                        Unichat
+                    </h1>
+                    <p className="text-xl text-gray-600">
+                        {authOption === "login" ? "Welcome back! Sign in to your account" : "Join the conversation"}
+                    </p>
+                </div>
+
+                <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+                    <div className="text-center mb-6">
+                        <h2 className="text-2xl font-semibold text-black">
+                            {authOption === "login" ? "Sign In" : "Create Account"}
+                        </h2>
+                    </div>
+
+                    {authOption === "login" ? (
+                        <form onSubmit={onSubmit} className="max-w-md mx-auto space-y-6 pb-4">
+                            <div className="space-y-2">
+                                <label className="block text-sm font-medium text-black">Email Address</label>
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
+                                    className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                                    placeholder="Enter your email"
+                                    required
+                                />
                             </div>
-                            <div className="row-start-2 col-span-2 flex flex-col items-start  ">
-                                <p className="pb-2">Password</p>
-                                <input type="password" value={password} onChange={e => setPass(e.target.value)}
-                                    className="w-full border border-slate-200 p-2 rounded-lg " required />
+
+                            <div className="space-y-2">
+                                <label className="block text-sm font-medium text-black">Password</label>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={e => setPass(e.target.value)}
+                                    className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                                    placeholder="Enter your password"
+                                    required
+                                />
                             </div>
-                            <div className="row-start-3 col-start-1 ">
-                                <div className="flex items-center mb-4">
-                                    <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    </input>
-                                    <label className="m-2 text-sm font-medium text-gray-900 ">Remember me</label>
+
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                    <input
+                                        id="remember"
+                                        type="checkbox"
+                                        className="w-4 h-4 text-black bg-white border-gray-300 rounded focus:ring-black"
+                                    />
+                                    <label htmlFor="remember" className="ml-2 text-sm text-gray-600">
+                                        Remember me
+                                    </label>
                                 </div>
-                            </div>
-                            <div className="row-start-3 col-start-2 ">
-                                <button className="m-2 text-blue-500 hover hover:text-blue-600 text-sm cursor-pointer">Forgot password?</button>
-                            </div>
-
-                            <div className="row-start-4 col-span-2 ">
-                                <button disabled={loading}
-                                    type="submit" className="flex flex-row items-center justify-center bg-blue-500 p-2 rounded-lg text-sm text-white w-full">
-                                    {loading ? "Signing in..." : "Sign in"}
+                                <button type="button" className="text-black hover:underline text-sm">
+                                    Forgot password?
                                 </button>
-                                {error && <p className="text-red-500 mb-4">{error}</p>}
                             </div>
-                        </form>
-                    )}
-                    {authOption === "signup" && (
-                        <>
-                            {/* Section heading */}
-                            <p className="text-2xl font-semibold mb-6">Create your account</p>
 
-                            {/* Signup form */}
-                            <form
-                            onSubmit={onSignup}
-                            className="w-full max-w-sm flex flex-col gap-5"
-                            >
-                            <label className="block">
-                                <span className="text-gray-700">Username</span>
-                                <input
-                                name="username"
-                                value={signupForm.username}
-                                onChange={handleChange}
-                                required
-                                className="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:ring"
-                                />
-                            </label>
-
-                            <label className="block">
-                                <span className="text-gray-700">Email</span>
-                                <input
-                                name="email"
-                                type="email"
-                                value={signupForm.email}
-                                onChange={handleChange}
-                                required
-                                className="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:ring"
-                                />
-                            </label>
-
-                            <label className="block">
-                                <span className="text-gray-700">Name</span>
-                                <input
-                                name="name"
-                                value={signupForm.name}
-                                onChange={handleChange}
-                                required
-                                className="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:ring"
-                                />
-                            </label>
-
-                            <label className="block">
-                                <span className="text-gray-700">Bio</span>
-                                <input
-                                name="bio"
-                                value={signupForm.bio}
-                                onChange={handleChange}
-                                className="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:ring"
-                                />
-                            </label>
-
-                            <label className="block">
-                                <span className="text-gray-700">University</span>
-                                <input
-                                name="university"
-                                value={signupForm.university}
-                                onChange={handleChange}
-                                className="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:ring"
-                                />
-                            </label>
-
-                            <label className="block">
-                                <span className="text-gray-700">Password</span>
-                                <input
-                                name="password"
-                                type="password"
-                                value={signupForm.password}
-                                onChange={handleChange}
-                                required
-                                className="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:ring"
-                                />
-                            </label>
-
-                            {error && <p className="text-red-500 text-sm">{error}</p>}
+                            {error && (
+                                <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md border border-red-200">
+                                    {error}
+                                </div>
+                            )}
 
                             <button
                                 type="submit"
-                                disabled={signupLoading}
-                                className="w-full py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                                disabled={loading}
+                                className="w-full bg-black text-white p-3 rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
-                                {signupLoading ? "Signing up…" : "Sign up"}
+                                {loading ? "Signing in..." : "Sign In"}
                             </button>
+                        </form>
+                    ) : (
+                        <form onSubmit={onSignup} className="space-y-6">
+                            {/* Horizontal Layout for Signup */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Left Column */}
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-black">Username</label>
+                                        <input
+                                            name="username"
+                                            value={signupForm.username}
+                                            onChange={handleChange}
+                                            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                                            placeholder="Choose username"
+                                            required
+                                        />
+                                    </div>
 
-                            <button
-                                type="button"
-                                onClick={() => setAuthOption("login")}
-                                className="text-center text-sm text-blue-500 hover:underline"
-                            >
-                                Already have an account?
-                            </button>
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-black">Email</label>
+                                        <input
+                                            name="email"
+                                            type="email"
+                                            value={signupForm.email}
+                                            onChange={handleChange}
+                                            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                                            placeholder="Enter your email"
+                                            required
+                                        />
+                                    </div>
 
-                            <p className="text-xs text-gray-500 text-center">
-                                By registering, you agree to Unichat’s <strong>Terms of Service</strong> and{" "}
-                                <strong>Privacy Policy</strong>.
-                            </p>
-                            </form>
-                        </>
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-black">Full Name</label>
+                                        <input
+                                            name="name"
+                                            value={signupForm.name}
+                                            onChange={handleChange}
+                                            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                                            placeholder="Enter your full name"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Right Column */}
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-black">Bio</label>
+                                        <input
+                                            name="bio"
+                                            value={signupForm.bio}
+                                            onChange={handleChange}
+                                            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                                            placeholder="Tell us about yourself"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-black">University</label>
+                                        <input
+                                            name="university"
+                                            value={signupForm.university}
+                                            onChange={handleChange}
+                                            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                                            placeholder="Your university"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-black">Password</label>
+                                        <input
+                                            name="password"
+                                            type="password"
+                                            value={signupForm.password}
+                                            onChange={handleChange}
+                                            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                                            placeholder="Create a password"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Center Section */}
+                            <div className="space-y-4 max-w-md mx-auto">
+                                {error && (
+                                    <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md border border-red-200">
+                                        {error}
+                                    </div>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    disabled={signupLoading}
+                                    className="w-full bg-black text-white p-3 rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                >
+                                    {signupLoading ? "Creating account..." : "Create Account"}
+                                </button>
+
+                                <div className="text-center">
+                                    <button
+                                        type="button"
+                                        onClick={() => setAuthOption("login")}
+                                        className="text-black hover:underline"
+                                    >
+                                        Already have an account? Sign in
+                                    </button>
+                                </div>
+
+                                <p className="text-xs text-gray-500 text-center px-4">
+                                    By creating an account, you agree to Unichat's{" "}
+                                    <button type="button" className="text-black hover:underline">
+                                        Terms of Service
+                                    </button>{" "}
+                                    and{" "}
+                                    <button type="button" className="text-black hover:underline">
+                                        Privacy Policy
+                                    </button>
+                                </p>
+                            </div>
+                        </form>
                     )}
-                    
                 </div>
+
                 {authOption === "login" && (
-                    <div className="flex flex-row items-center">
-                        <p className="text-md px-2">Don't have an account?</p>
-                        <button onClick={() => setAuthOption("signup")} className="text-blue-500 hover hover:text-blue-600 cursor-pointer">Signup here</button>
+                    <div className="text-center mt-6">
+                        <p className="text-gray-600">
+                            Don't have an account?{" "}
+                            <button
+                                onClick={() => setAuthOption("signup")}
+                                className="text-black hover:underline"
+                            >
+                                Sign up here
+                            </button>
+                        </p>
                     </div>
                 )}
-                
             </div>
-            
         </div>
         
     )
