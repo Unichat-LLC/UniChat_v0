@@ -1,5 +1,6 @@
 import "dotenv/config";
 
+// Load environment variables and export them for use throughout the app
 export const env = {
   POSTGRES_HOST: process.env.POSTGRES_HOST!,
   POSTGRES_USER: process.env.POSTGRES_USER!,
