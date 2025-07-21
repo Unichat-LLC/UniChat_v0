@@ -11,9 +11,19 @@ interface User {
   created_at: string;
 }
 
+export interface SignupData {
+  username: string;
+  email:    string;
+  name:     string;
+  bio:      string;
+  university: string;
+  password: string;
+}
+
 interface AuthContext {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
+  signup: (data: SignupData) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -38,12 +48,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser(res.data.user);
     };
 
+    const signup = async(data: SignupData) => {
+        const res = await api.post("/signup", data);
+        setUser(res.data.user);
+    }
+
     const logout = async () => {
         await api.post("/logout");
         setUser(null);
     };
 
-    return <AuthContext.Provider value={{user, login, logout}}>
+
+    return <AuthContext.Provider value={{user, login, signup, logout}}>
         {children}
     </AuthContext.Provider>
 }

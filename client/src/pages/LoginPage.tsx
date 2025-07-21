@@ -1,16 +1,26 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth, type SignupData } from "../context/AuthContext";
 
 export default function Login(){
     const [authOption, setAuthOption] = useState("login");
     const [loading, setLoading] = useState(false);
+    const [signupLoading, setSignupLoading] = useState(false);
 
     const [email, setEmail] = useState("");
     const [password, setPass] = useState("");
     const [error, setError] = useState("");
-    const {login} = useAuth();
+    const {login, signup} = useAuth();
     const navigate = useNavigate();
+
+    const [signupForm, setSignupForm] = useState<SignupData>({
+        username:  "",
+        email:     "",
+        name:      "",
+        bio:       "",
+        university: "",
+        password:  "",
+    });
 
     const onSubmit = async(e: React.FormEvent) => {
         e.preventDefault();
@@ -24,6 +34,23 @@ export default function Login(){
             setLoading(false);
         }
     };
+    
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSignupForm(f => ({ ...f, [e.target.name]: e.target.value }));
+    };
+
+    const onSignup = async(e: React.FormEvent) => {
+        e.preventDefault();
+        setSignupLoading(true);
+        try {
+            await signup(signupForm)
+            navigate("/dashboard");
+        }catch {
+            setError("Invalid credentials");
+        }finally{
+            setSignupLoading(false);
+        }
+    }
     
     return (
         <div className="font-sans-serif bg-gray-50 h-screen">
@@ -63,27 +90,41 @@ export default function Login(){
                             </div>
                         </form>
                     ): (
-                        <div className="grid grid-cols-2 min-w-sm gap-5 ">
+                        <form onSubmit={onSignup} className="grid grid-cols-2 min-w-sm gap-5 ">
                             <div className="row-start-1 col-span-2 flex flex-col items-start ">
-                                <p className="pb-2">Student Email</p>
-                                <input className="w-full border border-slate-200  p-2 rounded-lg" required />
+                                <p className="pb-2">Username</p>
+                                <input name="username" value={signupForm.username} onChange={handleChange} className="w-full border border-slate-200  p-2 rounded-lg" required />
                             </div>
                             <div className="row-start-2 col-span-2 flex flex-col items-start ">
-                                <p className="pb-2">Username</p>
-                                <input className="w-full border border-slate-200 p-2 rounded-lg" required />
+                                <p className="pb-2">Email</p>
+                                <input name="email" value={signupForm.email} onChange={handleChange} className="w-full border border-slate-200 p-2 rounded-lg" required />
                             </div>
                             <div className="row-start-3 col-span-2 flex flex-col items-start  ">
+                                <p className="pb-2">Name</p>
+                                <input name="name" value={signupForm.name} onChange={handleChange} className="w-full border border-slate-200 p-2 rounded-lg " required />
+                            </div>
+                            <div className="row-start-4 col-span-2 flex flex-col items-start  ">
+                                <p className="pb-2">Bio</p>
+                                <input name="bio" value={signupForm.bio} onChange={handleChange} className="w-full border border-slate-200 p-2 rounded-lg " required />
+                            </div>
+                            <div className="row-start-5 col-span-2 flex flex-col items-start  ">
+                                <p className="pb-2">University</p>
+                                <input name="university" value={signupForm.university} onChange={handleChange} className="w-full border border-slate-200 p-2 rounded-lg " required />
+                            </div>
+                            <div className="row-start-6 col-span-2 flex flex-col items-start  ">
                                 <p className="pb-2">Password</p>
-                                <input className="w-full border border-slate-200 p-2 rounded-lg " required />
+                                <input name="password" value={signupForm.password} onChange={handleChange} className="w-full border border-slate-200 p-2 rounded-lg " required />
                             </div>
                             <div className="row-start-4 col-span-2 ">
-                                <button className="flex flex-row items-center justify-center cursor-pointer bg-blue-500 p-2 rounded-lg text-sm text-white w-full">Sign in</button>
+                                <button type="submit" disabled={signupLoading} className="flex flex-row items-center justify-center cursor-pointer bg-blue-500 p-2 rounded-lg text-sm text-white w-full">
+                                    {signupLoading ? "Signing up…" : "Sign up"}
+                                </button>
                                 <button className="mt-2 text-blue-500 hover hover:text-blue-600 text-sm cursor-pointer">Already have an account?</button>
                             </div>
                             <div className="row-start-5 col-span-2">
                                 <p className="text-[0.80rem]">By registering, you agree to Unichat's <strong>Terms of Service</strong> and <strong>Privacy Policy</strong></p>
                             </div>
-                        </div>
+                        </form>
                     )}
                     
                 </div>
