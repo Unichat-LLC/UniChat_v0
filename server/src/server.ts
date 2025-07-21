@@ -91,7 +91,15 @@ app.post("/api/login", login);
 
 //protected routes (authentication required)
 app.post("/api/logout", requireAuth, logout);
+app.get(
+  "/api/profile",
+  requireAuth,
+  (req: Request, res: Response) => {
+    res.json({user: req.user});
+  }
+);
 app.patch("/api/profile", requireAuth, updateProfile);
+
 
 //group related routes
 app.get("/api/groups/:groupId/members", requireAuth, requireGroup, getGroupMembers);

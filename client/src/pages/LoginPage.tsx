@@ -58,7 +58,7 @@ export default function Login(){
                 <h1 className="text-5xl">Unichat</h1>
                 {authOption === "login" && (<p className="text-2xl">Sign in to your account</p>)}
                 <div className="p-10 border border-gray-200 rounded-xl bg-white shadow-md">
-                    {authOption === "login" ? (
+                    {authOption === "login" && (
                         <form onSubmit={onSubmit} className="grid grid-cols-2 min-w-sm grid-rows-[25%_25%_10%_1fr] gap-5 ">
                             <div className="row-start-1 col-span-2 flex flex-col items-start ">
                                 <p className="pb-2">Username/Email</p>
@@ -89,42 +89,107 @@ export default function Login(){
                                 {error && <p className="text-red-500 mb-4">{error}</p>}
                             </div>
                         </form>
-                    ): (
-                        <form onSubmit={onSignup} className="grid grid-cols-2 min-w-sm gap-5 ">
-                            <div className="row-start-1 col-span-2 flex flex-col items-start ">
-                                <p className="pb-2">Username</p>
-                                <input name="username" value={signupForm.username} onChange={handleChange} className="w-full border border-slate-200  p-2 rounded-lg" required />
-                            </div>
-                            <div className="row-start-2 col-span-2 flex flex-col items-start ">
-                                <p className="pb-2">Email</p>
-                                <input name="email" value={signupForm.email} onChange={handleChange} className="w-full border border-slate-200 p-2 rounded-lg" required />
-                            </div>
-                            <div className="row-start-3 col-span-2 flex flex-col items-start  ">
-                                <p className="pb-2">Name</p>
-                                <input name="name" value={signupForm.name} onChange={handleChange} className="w-full border border-slate-200 p-2 rounded-lg " required />
-                            </div>
-                            <div className="row-start-4 col-span-2 flex flex-col items-start  ">
-                                <p className="pb-2">Bio</p>
-                                <input name="bio" value={signupForm.bio} onChange={handleChange} className="w-full border border-slate-200 p-2 rounded-lg " required />
-                            </div>
-                            <div className="row-start-5 col-span-2 flex flex-col items-start  ">
-                                <p className="pb-2">University</p>
-                                <input name="university" value={signupForm.university} onChange={handleChange} className="w-full border border-slate-200 p-2 rounded-lg " required />
-                            </div>
-                            <div className="row-start-6 col-span-2 flex flex-col items-start  ">
-                                <p className="pb-2">Password</p>
-                                <input name="password" value={signupForm.password} onChange={handleChange} className="w-full border border-slate-200 p-2 rounded-lg " required />
-                            </div>
-                            <div className="row-start-4 col-span-2 ">
-                                <button type="submit" disabled={signupLoading} className="flex flex-row items-center justify-center cursor-pointer bg-blue-500 p-2 rounded-lg text-sm text-white w-full">
-                                    {signupLoading ? "Signing up…" : "Sign up"}
-                                </button>
-                                <button className="mt-2 text-blue-500 hover hover:text-blue-600 text-sm cursor-pointer">Already have an account?</button>
-                            </div>
-                            <div className="row-start-5 col-span-2">
-                                <p className="text-[0.80rem]">By registering, you agree to Unichat's <strong>Terms of Service</strong> and <strong>Privacy Policy</strong></p>
-                            </div>
-                        </form>
+                    )}
+                    {authOption === "signup" && (
+                        <>
+                            {/* Section heading */}
+                            <p className="text-2xl font-semibold mb-6">Create your account</p>
+
+                            {/* Signup form */}
+                            <form
+                            onSubmit={onSignup}
+                            className="w-full max-w-sm flex flex-col gap-5"
+                            >
+                            <label className="block">
+                                <span className="text-gray-700">Username</span>
+                                <input
+                                name="username"
+                                value={signupForm.username}
+                                onChange={handleChange}
+                                required
+                                className="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:ring"
+                                />
+                            </label>
+
+                            <label className="block">
+                                <span className="text-gray-700">Email</span>
+                                <input
+                                name="email"
+                                type="email"
+                                value={signupForm.email}
+                                onChange={handleChange}
+                                required
+                                className="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:ring"
+                                />
+                            </label>
+
+                            <label className="block">
+                                <span className="text-gray-700">Name</span>
+                                <input
+                                name="name"
+                                value={signupForm.name}
+                                onChange={handleChange}
+                                required
+                                className="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:ring"
+                                />
+                            </label>
+
+                            <label className="block">
+                                <span className="text-gray-700">Bio</span>
+                                <input
+                                name="bio"
+                                value={signupForm.bio}
+                                onChange={handleChange}
+                                className="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:ring"
+                                />
+                            </label>
+
+                            <label className="block">
+                                <span className="text-gray-700">University</span>
+                                <input
+                                name="university"
+                                value={signupForm.university}
+                                onChange={handleChange}
+                                className="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:ring"
+                                />
+                            </label>
+
+                            <label className="block">
+                                <span className="text-gray-700">Password</span>
+                                <input
+                                name="password"
+                                type="password"
+                                value={signupForm.password}
+                                onChange={handleChange}
+                                required
+                                className="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:ring"
+                                />
+                            </label>
+
+                            {error && <p className="text-red-500 text-sm">{error}</p>}
+
+                            <button
+                                type="submit"
+                                disabled={signupLoading}
+                                className="w-full py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                            >
+                                {signupLoading ? "Signing up…" : "Sign up"}
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => setAuthOption("login")}
+                                className="text-center text-sm text-blue-500 hover:underline"
+                            >
+                                Already have an account?
+                            </button>
+
+                            <p className="text-xs text-gray-500 text-center">
+                                By registering, you agree to Unichat’s <strong>Terms of Service</strong> and{" "}
+                                <strong>Privacy Policy</strong>.
+                            </p>
+                            </form>
+                        </>
                     )}
                     
                 </div>
