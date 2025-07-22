@@ -10,8 +10,6 @@ import {
   Send,
   Paperclip,
   Smile,
-  Volume2,
-  MessageCircle,
   ArrowRightFromLine
 } from 'lucide-react';
 import placeholder from '../assets/placeholder.png';

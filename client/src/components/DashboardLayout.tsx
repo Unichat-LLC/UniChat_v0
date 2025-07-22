@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 
 export default function DashboardLayout() {
-  const { user, logout} = useAuth();
+  const { user} = useAuth();
 
   useEffect(() => {
     if (!user) return;
