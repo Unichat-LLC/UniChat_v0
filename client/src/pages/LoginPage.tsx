@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom";
-import { useAuth, type SignupData } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
+import type { SignupData } from "../lib/DataTypes";
 
 export default function Login(){
     const [authOption, setAuthOption] = useState("login");

@@ -1,33 +1,7 @@
 import {createContext, useContext, useState, useEffect, type ReactNode} from "react";
 import { api } from "../services/api";
+import type { User, SignupData, UpdateProfileData } from "../lib/DataTypes";
 
-interface User {
-  id: number;
-  username: string;
-  email: string;
-  name: string;
-  bio: string;
-  university: string;
-  created_at: string;
-}
-
-export interface SignupData {
-  username: string;
-  email:    string;
-  name:     string;
-  bio:      string;
-  university: string;
-  password: string;
-}
-
-export interface UpdateProfileData {
-  username?: string;
-  email?: string;
-  name?: string;
-  bio?: string;
-  university?: string;
-  password?: string;
-}
 
 
 interface AuthContext {
