@@ -2,8 +2,6 @@ import {createContext, useContext, useState, useEffect, type ReactNode} from "re
 import { api } from "../services/api";
 import type { User, SignupData, UpdateProfileData } from "../lib/DataTypes";
 
-
-
 interface AuthContext {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;

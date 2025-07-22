@@ -7,6 +7,7 @@ import DashboardLayout from './components/DashboardLayout'
 import Profile from './pages/ProfilePage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
+import { ChatProvider } from './context/ChatContext'
 
 function App() {
 
@@ -14,19 +15,22 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route element={<MainLayout />}>
-            <Route index element={ <LandingPage />} />
-          </Route>
-          
-          <Route path='/login' element={ <Login />} />
-          {/* profile is protected */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="profile" element={<Profile />} />
-
-              <Route element={<DashboardLayout />}>
-                <Route path="dashboard" element={<Dashboard />} />
-              </Route>
+          <ChatProvider>
+            <Route element={<MainLayout />}>
+              <Route index element={ <LandingPage />} />
             </Route>
+            
+            <Route path='/login' element={ <Login />} />
+            {/* profile is protected */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="profile" element={<Profile />} />
+
+                <Route element={<DashboardLayout />}>
+                  <Route path="dashboard" element={<Dashboard />} />
+                </Route>
+              </Route>
+          </ChatProvider>
+          
         </Routes>
       </BrowserRouter>
     </AuthProvider> 

@@ -25,3 +25,29 @@ export interface UpdateProfileData {
   university?: string;
   password?: string;
 }
+
+export interface Group {
+    id: number;
+    name: string;
+    description: string;
+    created_at: Date;
+    updated_at: Date;
+    members: GroupMember[];
+}
+
+export interface GroupMember {
+    id: number;
+    group_id: number;
+    user_id: number;
+    role: string;
+    is_active: boolean;
+    joined_at: Date;
+}
+
+export interface Message{
+    id: number;
+    group_id: number;
+    sender_id: number;
+    message: string;
+    uploaded_at: Date;
+}
