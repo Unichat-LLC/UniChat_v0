@@ -1,4 +1,12 @@
-import {createContext, useContext, useState, useEffect, type ReactNode, useMemo, useCallback} from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+  useMemo,
+  useCallback
+} from "react";
 import { api } from "../services/api";
 import type { Group, GroupMember, Message } from "../lib/DataTypes";
 
@@ -12,13 +20,13 @@ interface ChatContextValue {
   getGroupMembers: (groupId: number) => Promise<void>;
   getMessages: (groupId: number) => Promise<void>;
   sendMessage: (groupId: number, content: string) => Promise<void>;
+  createGroup: (name: string, description: string) => Promise<void>;
+  joinGroup: (groupId: number) => Promise<void>;   // if you want a “join” flow
 }
 
 const ChatContext = createContext<ChatContextValue | undefined>(undefined);
 
-type ChatProviderProps = {
-  children: ReactNode;
-};
+type ChatProviderProps = { children: ReactNode };
 
 export function ChatProvider({ children }: ChatProviderProps) {
   const [groups, setGroups] = useState<Group[]>([]);
@@ -26,18 +34,16 @@ export function ChatProvider({ children }: ChatProviderProps) {
   const [members, setMembers] = useState<GroupMember[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
 
-  // Load all groups the user belongs to
+  // 1) Fetch your groups from GET /api/groups
   const getGroups = useCallback(async () => {
     const res = await api.get<{ groups: Group[] }>("/groups");
     setGroups(res.data.groups);
-    
-    //default to first group if nothing's selected yet
     if (!activeGroup && res.data.groups.length) {
       setActiveGroup(res.data.groups[0]);
     }
   }, [activeGroup]);
-  
-  // Load members for whichever group is active
+
+  // 2) Fetch members & messages
   const getGroupMembers = useCallback(async (groupId: number) => {
     const res = await api.get<{ groupMembers: GroupMember[] }>(
       `/groups/${groupId}/members`
@@ -45,7 +51,6 @@ export function ChatProvider({ children }: ChatProviderProps) {
     setMembers(res.data.groupMembers);
   }, []);
 
-  // Load chat history for the active group
   const getMessages = useCallback(async (groupId: number) => {
     const res = await api.get<{ groupMessages: Message[] }>(
       `/groups/${groupId}/messages`
@@ -53,45 +58,84 @@ export function ChatProvider({ children }: ChatProviderProps) {
     setMessages(res.data.groupMessages);
   }, []);
 
-  // Send a new chat message
-  const sendMessage = useCallback(async (groupId: number, content: string) => {
-    const res = await api.post<{ newMessage: Message }>(
-      `/groups/${groupId}/messages`,
-      { message: content }
-    );
-    // Prepend to list so newest appear at top
-    setMessages((msgs) => [res.data.newMessage, ...msgs]);
-  }, []);
+  // 3) Send a chat message
+  const sendMessage = useCallback(
+    async (groupId: number, content: string) => {
+      const res = await api.post<{ newMessage: Message }>(
+        `/groups/${groupId}/messages`,
+        { message: content }
+      );
+      setMessages((msgs) => [res.data.newMessage, ...msgs]);
+    },
+    []
+  );
 
-  // Whenever activeGroup changes, re-fetch members & messages
+  // 4) Create a brand-new group
+  const createGroup = useCallback(
+    async (name: string, description: string) => {
+      const res = await api.post<{ group: Group }>("/groups", {
+        name,
+        description,
+      });
+      // append to the list & switch into it
+      setGroups((gList) => [...gList, res.data.group]);
+      setActiveGroup(res.data.group);
+    },
+    []
+  );
+
+  // 5) Join an existing group
+  const joinGroup = useCallback(async (groupId: number) => {
+    await api.post(`/groups/${groupId}/join`);
+    // once you’re in, re-fetch group list & members
+    await getGroups();
+    if (activeGroup?.id === groupId) {
+      await getGroupMembers(groupId);
+    }
+  }, [activeGroup, getGroups, getGroupMembers]);
+
+  // Whenever activeGroup changes, re-fetch its members & messages
   useEffect(() => {
     if (!activeGroup) return;
     getGroupMembers(activeGroup.id);
     getMessages(activeGroup.id);
-  }, [activeGroup]);
+  }, [activeGroup, getGroupMembers, getMessages]);
 
-  // On mount, load groups
+  // On mount, load your groups
   useEffect(() => {
     getGroups();
-  }, []);
+  }, [getGroups]);
 
-  const value = useMemo(() => ({
-    groups,
-    activeGroup,
-    members,
-    messages,
-    setActiveGroup,
-    getGroups,
-    getGroupMembers,
-    getMessages,
-    sendMessage,
-  }), [groups, activeGroup, members, messages,
-      setActiveGroup, getGroups, getGroupMembers, getMessages, sendMessage]);
+  const value = useMemo(
+    () => ({
+      groups,
+      activeGroup,
+      members,
+      messages,
+      setActiveGroup,
+      getGroups,
+      getGroupMembers,
+      getMessages,
+      sendMessage,
+      createGroup,
+      joinGroup,
+    }),
+    [
+      groups,
+      activeGroup,
+      members,
+      messages,
+      getGroups,
+      getGroupMembers,
+      getMessages,
+      sendMessage,
+      createGroup,
+      joinGroup,
+    ]
+  );
 
   return (
-    <ChatContext.Provider value={value}>
-      {children}
-    </ChatContext.Provider>
+    <ChatContext.Provider value={value}>{children}</ChatContext.Provider>
   );
 }
 

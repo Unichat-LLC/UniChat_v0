@@ -51,3 +51,7 @@ export interface Message{
     message: string;
     uploaded_at: Date;
 }
+
+export interface JoinGroupResponse {
+  newMember:   GroupMember;
+}

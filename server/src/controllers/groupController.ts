@@ -52,3 +52,36 @@ export const getGroups = async(req: Request, res: Response) => {
         res.json({groups});
     }
 }
+
+// join a group
+export const joinGroup = async (req: Request, res: Response) => {
+  const userId = req.user!.id;
+  const groupId = Number(req.params.groupId);
+
+  // Prevent double–joining (optional)
+  const alreadyMember = await GroupModel.getGroupMembersByGroup(groupId)
+    .then(mems => mems.some(m => m.user_id === userId));
+  if (alreadyMember) {
+    return res.status(400).json({ error: "Already a member of this group" });
+  }
+
+  // Add them as a regular member
+  const newMember = await GroupModel.createGroupMember({
+    group_id: groupId,
+    user_id: userId,
+    role: "member"
+  });
+
+  // If they have a socket open, put them into the room
+  const socketId = userSocketMap[userId];
+  if (socketId) {
+    const sock = io.sockets.sockets.get(socketId);
+    sock?.join(`group-${groupId}`);
+  }
+
+  // Notify the room that someone joined
+  io.to(`group-${groupId}`).emit("userJoined", { userId });
+
+  // Return the new member record (or you could return the full member list)
+  res.status(201).json({ newMember });
+};
