@@ -96,7 +96,7 @@ export const GroupModel = {
             `SELECT g.id, g.name, g.description, g.created_at, g.updated_at
             FROM groups g
             JOIN group_members gm ON g.id = gm.group_id
-            WHERE gm.user_id = $1`,
+            WHERE g.user_id = $1`,
             [userId]
         );
     },

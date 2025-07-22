@@ -41,3 +41,14 @@ export const leaveGroup = async (req: Request, res: Response) => {
 
     res.json({ message: "You have left the group." }); // Respond with confirmation
 };
+
+// Get all the groups a user is in
+export const getGroups = async(req: Request, res: Response) => {
+    const userId = req.user!.id; //Get user ID from request
+
+    const groups= await GroupModel.getGroupsForUser(userId);
+
+    if(!groups){
+        res.json({groups});
+    }
+}

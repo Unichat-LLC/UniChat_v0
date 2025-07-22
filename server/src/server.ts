@@ -9,7 +9,7 @@ import { requireAuth } from "./middleware/auth.js";
 import cookieParser from "cookie-parser";
 import { requireGroup } from "./middleware/utils.js";
 import { getGroupMembers, getMessages, getUserMessages, sendMessage } from "./controllers/messageController.js";
-import { createGroup, leaveGroup } from "./controllers/groupController.js";
+import { createGroup, leaveGroup, getGroups } from "./controllers/groupController.js";
 import { GroupModel } from "./models/Group.js";
 
 
@@ -104,6 +104,7 @@ app.patch("/api/profile", requireAuth, updateProfile);
 //group related routes
 app.get("/api/groups/:groupId/members", requireAuth, requireGroup, getGroupMembers);
 app.post("/api/groups", requireAuth, createGroup);
+app.get("/api/groups", requireAuth, getGroups);
 app.delete("/api/groups/:groupId/leave", requireAuth, requireGroup, leaveGroup);
 
 //message related routes

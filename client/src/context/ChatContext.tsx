@@ -30,10 +30,12 @@ export function ChatProvider({ children }: ChatProviderProps) {
   const getGroups = useCallback(async () => {
     const res = await api.get<{ groups: Group[] }>("/groups");
     setGroups(res.data.groups);
+    
+    //default to first group if nothing's selected yet
     if (!activeGroup && res.data.groups.length) {
       setActiveGroup(res.data.groups[0]);
     }
-  }, []);
+  }, [activeGroup]);
   
   // Load members for whichever group is active
   const getGroupMembers = useCallback(async (groupId: number) => {
