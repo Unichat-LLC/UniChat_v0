@@ -9,7 +9,7 @@ export default function Header(){
             <div className="max-w-6xl mx-auto bg-gray-50 px-6 py-4 flex items-center justify-between">
                 {/* Left: logo + nav links */}
                 <div className="flex items-center gap-16">
-                    <button onClick={() => navigate("/")} className="cursor-pointer font-bold text-xl">Unichat</button>
+                    <button onClick={() => navigate("/")} className="cursor-pointer font-bold text-lg">Unichat</button>
                     <nav className="flex gap-16 text-lg">
                         <button onClick={()=>navigate("/about")} className="hover:underline">About</button>
                         <a href="#" className="hover:underline">Resources</a>

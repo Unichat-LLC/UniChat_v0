@@ -9,6 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import { ChatProvider } from './context/ChatContext'
 import FAQ from './pages/faq'
+import About from './pages/About'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           </Route>
           <Route path='/login' element={<Login />} />
           <Route path='/faq' element={<FAQ />} />
+          <Route path='/about' element={<About />} />
 
           {/* Protected routes - wrap with ChatProvider */}
           <Route element={<ProtectedRoute />}>
