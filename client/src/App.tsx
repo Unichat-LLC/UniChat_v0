@@ -10,27 +10,37 @@ import { AuthProvider } from './context/AuthContext'
 import { ChatProvider } from './context/ChatContext'
 
 function App() {
-
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <ChatProvider>
-            <Route element={<MainLayout />}>
-              <Route index element={ <LandingPage />} />
-            </Route>
-            
-            <Route path='/login' element={ <Login />} />
-            {/* profile is protected */}
-              <Route element={<ProtectedRoute />}>
-                <Route path="profile" element={<Profile />} />
+          {/* Public routes - no ChatProvider needed */}
+          <Route element={<MainLayout />}>
+            <Route index element={<LandingPage />} />
+          </Route>
+          <Route path='/login' element={<Login />} />
 
-                <Route element={<DashboardLayout />}>
-                  <Route path="dashboard" element={<Dashboard />} />
-                </Route>
-              </Route>
-          </ChatProvider>
-          
+          {/* Protected routes - wrap with ChatProvider */}
+          <Route element={<ProtectedRoute />}>
+            <Route 
+              path="profile" 
+              element={
+                <ChatProvider>
+                  <Profile />
+                </ChatProvider>
+              } 
+            />
+            <Route element={<DashboardLayout />}>
+              <Route 
+                path="dashboard" 
+                element={
+                  <ChatProvider>
+                    <Dashboard />
+                  </ChatProvider>
+                } 
+              />
+            </Route>
+          </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider> 

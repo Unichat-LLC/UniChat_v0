@@ -57,8 +57,8 @@ export default function Login(){
         
         <div className="min-h-screen bg-white flex items-center justify-center p-4">
             <div className="w-full max-w-6xl mx-auto">
-                <div className="text-center mb-8">
-                    <h1 className="text-6xl font-bold text-black mb-4">
+                <div className="text-center mb-6">
+                    <h1 className="text-6xl font-bold text-black mb-2">
                         Unichat
                     </h1>
                     <p className="text-xl text-gray-600">
@@ -67,7 +67,7 @@ export default function Login(){
                 </div>
 
                 <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
-                    <div className="text-center mb-6">
+                    <div className="text-center mb-5">
                         <h2 className="text-2xl font-semibold text-black">
                             {authOption === "login" ? "Sign In" : "Create Account"}
                         </h2>
@@ -130,7 +130,7 @@ export default function Login(){
                             </button>
                         </form>
                     ) : (
-                        <form onSubmit={onSignup} className="space-y-6">
+                        <form onSubmit={onSignup} className="space-y-2">
                             {/* Horizontal Layout for Signup */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* Left Column */}
@@ -213,7 +213,7 @@ export default function Login(){
                             </div>
 
                             {/* Center Section */}
-                            <div className="space-y-4 max-w-md mx-auto">
+                            <div className="space-y-4 pt-5 max-w-md mx-auto">
                                 {error && (
                                     <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md border border-red-200">
                                         {error}
