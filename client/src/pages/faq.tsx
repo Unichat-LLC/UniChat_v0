@@ -45,10 +45,8 @@ export default function FAQ () {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col  ">
-        <div>
-            <Header />
-        </div>
+    <div className="min-h-screen bg-gray-50  ">
+        <Header/>
         <div className="min-w-4xl max-w-4xl mx-auto px-6 py-12">
             {/* Header */}
             <div className="text-center mb-12">
@@ -101,7 +99,7 @@ export default function FAQ () {
             <p className="text-muted-foreground mb-6">
                 Our support team is here to help you with any questions or concerns.
             </p>
-            <button className="px-6 py-3 bg-black text-white rounded-lg hover:bg-primary/90 transition-colors font-medium">
+            <button className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors font-medium">
                 Contact Support
             </button>
             </div>

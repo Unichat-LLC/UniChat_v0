@@ -58,9 +58,9 @@ export default function Login(){
         <div className="min-h-screen bg-white flex items-center justify-center p-4">
             <div className="w-full max-w-6xl mx-auto">
                 <div className="text-center mb-6">
-                    <h1 className="text-6xl font-bold text-black mb-2">
+                    <button onClick={() => navigate("/")} className="cursor-pointer hover:bg-gray-50 py-2 px-5 rounded-xl text-6xl font-bold text-black mb-2">
                         Unichat
-                    </h1>
+                    </button>
                     <p className="text-xl text-gray-600">
                         {authOption === "login" ? "Welcome back! Sign in to your account" : "Join the conversation"}
                     </p>
