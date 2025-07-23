@@ -51,7 +51,7 @@ const About = () => {
             {/* Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
                 {stats.map((stat, index) => (
-                    <div key={index} className="text-center bg-white border border-gray-200 rounded-xl">
+                    <div key={index} className="text-center bg-white border border-gray-200 rounded-xl shadow-md">
                         <div className="p-6">
                             <div className="text-2xl font-bold text-black mb-2">{stat.number}</div>
                             <div className="text-gray-500 text-sm">{stat.label}</div>
@@ -67,7 +67,7 @@ const About = () => {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {features.map((feature, index) => (
-                    <div key={index} className="text-center bg-white border border-gray-200 rounded-xl p-5">
+                    <div key={index} className="text-center bg-white border border-gray-200 rounded-xl p-5 shadow-md">
                         <div>
                         <div className="mx-auto mb-4 p-3 bg-gray-200 rounded-full w-fit">
                             <feature.icon className="h-6 w-6 text-foreground" />
@@ -85,7 +85,7 @@ const About = () => {
             </div>
 
             {/* Mission Section */}
-            <div className="mb-16 bg-white border border-gray-200 rounded-xl p-8">
+            <div className="mb-16 bg-white border border-gray-200 rounded-xl p-8 shadow-md">
                 <h2 className="text-2xl text-center pb-5">Our Mission</h2>
                 <p className="text-gray-500 text-center text-md leading-relaxed max-w-4xl mx-auto">
                     To transform the way students and educators communicate by providing a platform that 
@@ -105,7 +105,7 @@ const About = () => {
                     and user experience design. We understand the unique challenges facing modern education 
                     because we've lived them ourselves.
                 </p>
-                <div className="bg-gray-100 border border-gray-200 rounded-xl p-8">
+                <div className="bg-gray-100 border border-gray-200 rounded-xl p-8 shadow-md">
                     <h3 className="text-xl font-semibold text-black mb-4">
                     Join Our Community
                     </h3>

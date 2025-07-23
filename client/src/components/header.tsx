@@ -12,8 +12,8 @@ export default function Header(){
                     <button onClick={() => navigate("/")} className="cursor-pointer font-bold text-lg">Unichat</button>
                     <nav className="flex gap-16 text-lg">
                         <button onClick={()=>navigate("/about")} className="hover:underline">About</button>
-                        <a href="#" className="hover:underline">Resources</a>
-                        <a href="#" className="hover:underline">Pricing</a>
+                        <button onClick={()=>navigate("/resources")} className="hover:underline">Resources</button>
+                        <button onClick={()=>navigate("/pricing")} className="hover:underline">Pricing</button>
                         <button onClick={() => navigate("/faq")} className="hover:underline">FAQ</button>
                     </nav>
                 </div>
