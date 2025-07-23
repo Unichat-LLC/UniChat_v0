@@ -12,6 +12,7 @@ import FAQ from './pages/faq'
 import About from './pages/About'
 import Resources from './pages/Resources'
 import Pricing from './pages/Pricing'
+import ContactUs from './pages/Contact'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path='/about' element={<About />} />
           <Route path='/resources' element={<Resources />} />
           <Route path='/pricing' element={<Pricing />} />
+          <Route path='/contact' element={<ContactUs />} />
           
           {/* Protected routes - wrap with ChatProvider */}
           <Route element={<ProtectedRoute />}>
