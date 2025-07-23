@@ -23,7 +23,7 @@ export const getMessages = async(req: Request, res: Response) => {
 // Get messages for a selected user
 export const getUserMessages = async(req: Request, res: Response) => {
     const senderId = req.user!.id;
-    const userMessages = await MessageModel.getMsgbyUser(senderId);
+    const userMessages = await MessageModel.getMsgByUser(senderId);
 
     res.json({userMessages});
 }

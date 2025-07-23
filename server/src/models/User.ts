@@ -86,5 +86,12 @@ export const UserModel = {
             [id]
         );
         return u?.password ?? null;
+    },
+
+    // UNIT TESTING ONLY
+    async usersClean(): Promise<void> {
+        await query(
+            `TRUNCATE TABLE users RESTART IDENTITY CASCADE`,[null]
+        );
     }
 }

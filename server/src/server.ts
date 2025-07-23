@@ -4,7 +4,7 @@ import "dotenv/config";
 import cors from "cors";
 import http from "http";
 import { Server, Socket } from "socket.io";
-import { signup, login, logout, updateProfile } from "./controllers/userController.js";
+import { signup, login, logout, updateProfile, cleanAllTables } from "./controllers/userController.js";
 import { requireAuth } from "./middleware/auth.js";
 import cookieParser from "cookie-parser";
 import { requireGroup } from "./middleware/utils.js";
@@ -112,6 +112,9 @@ app.delete("/api/groups/:groupId/leave", requireAuth, requireGroup, leaveGroup);
 app.post("/api/groups/:groupId/messages", requireAuth, requireGroup, sendMessage);
 app.get("/api/groups/:groupId/messages", requireAuth, requireGroup, getMessages);
 app.get("/api/my/messages", requireAuth, getUserMessages);
+
+// UNIT TESTING ONLY!!!
+app.post("/api/clean", cleanAllTables);
 
 
 // Start the server and listen on the specified port

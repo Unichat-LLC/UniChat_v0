@@ -2,6 +2,8 @@ import { UserModel } from "../models/User.js";
 import { SessionModel } from "../models/Session.js";
 import { verifyPassword } from "../middleware/utils.js";
 import { Request, Response } from "express";
+import { GroupModel } from "../models/Group.js";
+import { MessageModel } from "../models/Message.js";
 
 const SESSION_LIFETIME_DAYS = 7;
 
@@ -79,4 +81,17 @@ export const updateProfile = async(req: Request, res: Response) => {
         passwordUpdated = true;
     }
     res.json({user, passwordUpdated});
+}
+
+// UNIT TESTING ONLY !!!!
+export const cleanAllTables = async() => {
+    if (process.env.NODE_ENV === 'production') {
+        throw new Error('Clean operation not allowed in production');
+    }
+    
+    await MessageModel.messagesClean();
+    await GroupModel.groupMembersClean();
+    await SessionModel.sessionsClean();
+    await GroupModel.groupsClean();
+    await UserModel.usersClean();
 }

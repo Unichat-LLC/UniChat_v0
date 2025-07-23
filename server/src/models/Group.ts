@@ -134,5 +134,18 @@ export const GroupModel = {
             `DELETE FROM group_members WHERE group_id = $1 AND user_id = $2`,
             [groupId, userId]
         );
+    },
+
+
+    // UNIT TESTING ONLY
+    async groupsClean(): Promise<void> {
+        await query(
+            `TRUNCATE TABLE groups RESTART IDENTITY CASCADE`,[null]
+        );
+    },
+    async groupMembersClean(): Promise<void> {
+        await query(
+            `TRUNCATE TABLE group_members RESTART IDENTITY CASCADE`, [null]
+        );
     }
 }

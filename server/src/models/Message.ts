@@ -41,5 +41,12 @@ export const MessageModel = {
 
     async deleteMsg(id: number): Promise <void> {
         await query(`DELETE FROM messages WHERE id = $1`, [id]);
+    },
+
+    // UNIT TESTING ONLY
+    async messagesClean(): Promise<void> {
+        await query(
+            `TRUNCATE TABLE messages RESTART IDENTITY CASCADE`,[null]
+        );
     }
 }

@@ -28,8 +28,12 @@ export const SessionModel = {
 
     async delete(token: string): Promise<void> {
         await query(`DELETE FROM sessions WHERE session_token = $1`, [token]);
+    },
+
+    // UNIT TESTING ONLY
+    async sessionsClean(): Promise<void> {
+        await query(
+            `TRUNCATE TABLE sessions RESTART IDENTITY CASCADE`,[null]
+        );
     }
-
-
-    //NOTE: CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 };
