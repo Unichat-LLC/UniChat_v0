@@ -74,7 +74,7 @@ export default function Login(){
                     </div>
 
                     {authOption === "login" ? (
-                        <form onSubmit={onSubmit} className="max-w-md mx-auto space-y-6 pb-4">
+                        <form onSubmit={onSubmit} className="max-w-md mx-auto space-y-6 pb-6">
                             <div className="space-y-2">
                                 <label className="block text-sm font-medium text-black">Email Address</label>
                                 <input

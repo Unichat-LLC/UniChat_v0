@@ -11,6 +11,7 @@ import { ChatProvider } from './context/ChatContext'
 import FAQ from './pages/faq'
 import About from './pages/About'
 import Resources from './pages/Resources'
+import Pricing from './pages/Pricing'
 
 function App() {
   return (
@@ -25,7 +26,8 @@ function App() {
           <Route path='/faq' element={<FAQ />} />
           <Route path='/about' element={<About />} />
           <Route path='/resources' element={<Resources />} />
-
+          <Route path='/pricing' element={<Pricing />} />
+          
           {/* Protected routes - wrap with ChatProvider */}
           <Route element={<ProtectedRoute />}>
             <Route 
