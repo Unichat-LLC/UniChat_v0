@@ -6,15 +6,15 @@ export default function Header(){
     const navigate = useNavigate();
     return (
         <header className="w-full">
-            <div className="mx-auto bg-gray-50 px-6 py-4 flex items-center justify-between">
+            <div className="max-w-6xl mx-auto bg-gray-50 px-6 py-4 flex items-center justify-between">
                 {/* Left: logo + nav links */}
                 <div className="flex items-center gap-16">
-                    <div className="font-bold text-xl">Unichat</div>
+                    <button onClick={() => navigate("/")} className="cursor-pointer font-bold text-xl">Unichat</button>
                     <nav className="flex gap-16 text-lg">
-                        <a href="#" className="hover:underline">About</a>
+                        <button onClick={()=>navigate("/about")} className="hover:underline">About</button>
                         <a href="#" className="hover:underline">Resources</a>
                         <a href="#" className="hover:underline">Pricing</a>
-                        <a href="#" className="hover:underline">FAQ</a>
+                        <button onClick={() => navigate("/faq")} className="hover:underline">FAQ</button>
                     </nav>
                 </div>
 

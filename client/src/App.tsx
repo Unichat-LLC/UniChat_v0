@@ -8,6 +8,7 @@ import Profile from './pages/ProfilePage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import { ChatProvider } from './context/ChatContext'
+import FAQ from './pages/faq'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route index element={<LandingPage />} />
           </Route>
           <Route path='/login' element={<Login />} />
+          <Route path='/faq' element={<FAQ />} />
 
           {/* Protected routes - wrap with ChatProvider */}
           <Route element={<ProtectedRoute />}>
