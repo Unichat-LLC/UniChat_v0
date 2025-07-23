@@ -18,7 +18,7 @@ export const UserModel = {
     async createUser(data: NewUser): Promise<User> {
         const hash = await hashPassword(data.password);
         const sql = `
-            INSERT INTO users (username, email, name, password_hash, bio, university)
+            INSERT INTO users (username, email, name, password, bio, university)
             VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING id, username, email, name, bio, university, created_at;
         `;
@@ -71,7 +71,7 @@ export const UserModel = {
     async updatePassword(id: number, newPassword: string): Promise<void> {
         const hash = await hashPassword(newPassword);
         await query(
-            `UPDATE users SET password_hash = $1 WHERE id = $2`,
+            `UPDATE users SET password = $1 WHERE id = $2`,
             [hash, id]
         );
     },
@@ -81,10 +81,10 @@ export const UserModel = {
     },
     
     async getPasswordHash(id: number): Promise<string | null> {
-        const [u] = await query<{ password_hash: string }>(
-            `SELECT password_hash FROM users WHERE id = $1`,
+        const [u] = await query<{ password: string }>(
+            `SELECT password FROM users WHERE id = $1`,
             [id]
         );
-        return u?.password_hash ?? null;
+        return u?.password ?? null;
     }
 }

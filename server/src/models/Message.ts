@@ -33,7 +33,7 @@ export const MessageModel = {
     },
 
 
-    async getMsgbyUser(senderId: number): Promise <Message[]>{
+    async getMsgByUser(senderId: number): Promise <Message[]>{
         return query<Message>(`
             SELECT * FROM messages WHERE sender_id = $1 ORDER BY uploaded_at ASC;
         `, [senderId]);

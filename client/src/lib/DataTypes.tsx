@@ -32,7 +32,6 @@ export interface Group {
     description: string;
     created_at: Date;
     updated_at: Date;
-    members: GroupMember[];
 }
 
 export interface GroupMember {

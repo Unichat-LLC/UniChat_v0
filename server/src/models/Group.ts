@@ -8,7 +8,6 @@ export interface Group {
     description: string;
     created_at: Date;
     updated_at: Date;
-    members: GroupMember[];
 }
 
 export interface GroupMember {
@@ -39,7 +38,7 @@ export const GroupModel = {
     async createGroupMember(data: newGroupMember): Promise<GroupMember> {
         const params = [data.group_id, data.user_id, data.role];
         const sql = `
-            INSERT INTO group_members (group_id, user_id, role) VALUES ($1, $2, $3) RETURN id, group_id, user_id, role, is_active, joined_at;
+            INSERT INTO group_members (group_id, user_id, role) VALUES ($1, $2, $3) RETURNING id, group_id, user_id, role, is_active, joined_at;
         `;
         const [groupMember] = await query<GroupMember>(sql, params);
         return groupMember;
@@ -96,7 +95,7 @@ export const GroupModel = {
             `SELECT g.id, g.name, g.description, g.created_at, g.updated_at
             FROM groups g
             JOIN group_members gm ON g.id = gm.group_id
-            WHERE g.user_id = $1`,
+            WHERE gm.user_id = $1`,
             [userId]
         );
     },
