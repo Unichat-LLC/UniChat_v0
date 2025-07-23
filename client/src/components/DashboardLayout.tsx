@@ -1,5 +1,5 @@
 import { Outlet} from "react-router-dom";
-import { initSocket } from "../lib/socket";
+import { initSocket, disconnectSocket } from "../lib/socket";
 import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 
@@ -8,9 +8,33 @@ export default function DashboardLayout() {
 
   useEffect(() => {
     if (!user) return;
-    const sock = initSocket(user.id);
-    sock.on("connect", ()=>console.log("🔌 socket up"));
-    return () => { sock.disconnect(); };
+    
+    try {
+      const sock = initSocket(user.id);
+      
+      sock.on("connect", () => {
+        console.log("Socket connected successfully");
+      });
+      
+      sock.on("connect_error", (error) => {
+        console.error("Socket connection error:", error);
+        // Don't prevent the Dashboard from loading even if socket fails
+      });
+      
+      sock.on("disconnect", (reason) => {
+        console.log("Socket disconnected:", reason);
+      });
+      
+      return () => { 
+        sock.off("connect");
+        sock.off("connect_error");
+        sock.off("disconnect");
+        disconnectSocket(); 
+      };
+    } catch (error) {
+      console.error("Failed to initialize socket:", error);
+      // Don't prevent the Dashboard from loading
+    }
   }, [user]);
 
   return (

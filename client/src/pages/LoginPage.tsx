@@ -231,7 +231,10 @@ export default function Login(){
                                 <div className="text-center">
                                     <button
                                         type="button"
-                                        onClick={() => setAuthOption("login")}
+                                        onClick={() => {
+                                            setError("");
+                                            setAuthOption("login");
+                                        }}
                                         className="text-black hover:underline"
                                     >
                                         Already have an account? Sign in
@@ -258,7 +261,10 @@ export default function Login(){
                         <p className="text-gray-600">
                             Don't have an account?{" "}
                             <button
-                                onClick={() => setAuthOption("signup")}
+                                onClick={() => {
+                                    setError("");
+                                    setAuthOption("signup");
+                                }}
                                 className="text-black hover:underline"
                             >
                                 Sign up here
