@@ -1,33 +1,59 @@
+import { useNavigate } from "react-router-dom";
 
+export default function Footer() {
+  const navigate = useNavigate();
 
-
-export default function Footer(){
-    return (
-        <footer className="bg-gray-50 shadow-sm dark:bg-gray-900">
-            <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
-                <div className="sm:flex sm:items-center sm:justify-between">
-                    <a href="https://flowbite.com/" className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
-                        <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
-                        <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Unichat</span>
-                    </a>
-                    <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
-                        <li>
-                            <a href="#" className="hover:underline me-4 md:me-6">About</a>
-                        </li>
-                        <li>
-                            <a href="#" className="hover:underline me-4 md:me-6">Privacy Policy</a>
-                        </li>
-                        <li>
-                            <a href="#" className="hover:underline me-4 md:me-6">Licensing</a>
-                        </li>
-                        <li>
-                            <a href="#" className="hover:underline">Contact</a>
-                        </li>
-                    </ul>
-                </div>
-                <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-                <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2025 <a href="https://flowbite.com/" className="hover:underline">Unichat™</a>. All Rights Reserved.</span>
+  return (
+    <footer className="bg-gray-50 border border-gray-200">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+          {/* Left: Logo */}
+          <div className="flex items-center gap-3">
+            <div className="h-8 w-8 bg-black rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">U</span>
             </div>
-        </footer>
-    )
+            <span className="text-2xl font-semibold text-black">Unichat</span>
+          </div>
+
+          {/* Right: Navigation */}
+          <nav className="flex flex-wrap gap-6">
+            <button
+              onClick={() => navigate("/about")}
+              className="text-gray-500 font-semibold hover:text-black text-sm p-0"
+            >
+              About
+            </button>
+            <button
+              onClick={() => navigate("/contact")}
+              className="text-gray-500 font-semibold hover:text-black text-sm p-0"
+            >
+              Contact
+            </button>
+            <button 
+              onClick={() => navigate("/pricing")}
+              className="text-gray-500 font-semibold hover:text-black text-sm p-0"
+            >
+              Pricing
+            </button>
+            <button
+              className="text-gray-500 font-semibold hover:text-black text-sm p-0"
+            >
+              Privacy Policy
+            </button>
+            <button
+              className="text-gray-500 font-semibold hover:text-black text-sm p-0"
+            >
+              Terms of Service
+            </button>
+          </nav>
+        </div>
+
+        <div className="my-8 border border-gray-200" />
+
+        <div className="text-center text-sm text-gray-500">
+          <p>© 2025 Unichat™. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
+  );
 }

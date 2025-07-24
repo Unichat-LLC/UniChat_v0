@@ -1,190 +1,223 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import { useNavigate } from "react-router-dom";
+import { Search, GraduationCap, Users, Settings, BookOpen, ArrowRight } from "lucide-react";
 
-export function LandingPage () {
-    const navigate = useNavigate();
+export function LandingPage() {
+  const navigate = useNavigate();
 
-    const universities = [
-        "University of Cincinnati",
-        "Ohio State University",
-    ];
+  const universities = [
+    "University of Cincinnati",
+    "Ohio State University",
+    "Stanford University",
+    "Harvard University",
+    "MIT",
+  ];
 
-    const [query, setQuery] = useState("");
-    const [showSuggestions, setShowSuggestions] = useState(false);
+  const [universityQuery, setUniversityQuery] = useState("");
+  const [classQuery, setClassQuery] = useState("");
+  const [showUniversitySuggestions, setShowUniversitySuggestions] = useState(false);
 
-    const filtered = universities.filter(u =>
-        u.toLowerCase().includes(query.toLowerCase())
-    );
+  const filteredUniversities = universities.filter((u) =>
+    u.toLowerCase().includes(universityQuery.toLowerCase())
+  );
 
-    return (
-        <div className="grid grid-cols-2 auto-rows-auto gap-1 outline-2 outline-offset-2 outline-dashed outline-slate-100 h-full">
-            <div className="row-start-1 col-span-2">
-                <Header />
+  const handleUniversitySelect = (university: string) => {
+    setUniversityQuery(university);
+    setShowUniversitySuggestions(false);
+  };
+
+  const handleUniversitySearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle university search logic
+  };
+
+  const handleClassSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle class search logic
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Header />
+      
+      {/* Hero Section */}
+      <main className="flex-1">
+        <div className="max-w-7xl mx-auto px-6 py-20">
+          <div className="text-center max-w-4xl mx-auto mb-16">
+            <div className="inline-block px-4 py-2 text-black rounded-full text-sm font-medium mb-4">
+              Connect • Learn • Succeed
             </div>
-            <div className="row-start-2 col-span-2 w-[70%]  px-6 pt-20">
-                <h1 className="text-bold text-8xl ">Group chats that actually help</h1>
-            </div>
-            <div className="row-start-3 col-span-2 px-3 py-12 w-[70%]">
-                <div className="flex flex-row items-center">
-                    <div className="w-1/2 flex flex-col gap-5 items-center">
-                        <form className="w-[90%]">
-                            <div className="flex w-full">
-                                {/* Input wrapper */}
-                                <div className="relative flex flex-1">
-                                    {/* Icon */}
-                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <svg 
-                                            xmlns="http://www.w3.org/2000/svg" 
-                                            fill="none" 
-                                            viewBox="0 0 24 24" 
-                                            strokeWidth="1.5" 
-                                            stroke="currentColor" 
-                                            className="w-6 h-6">
-                                            <path 
-                                                strokeLinecap="round" 
-                                                strokeLinejoin="round" 
-                                                d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
-                                        </svg>
-                                    </span>
+            <h1 className="text-6xl font-bold text-black mb-6 leading-tight">
+              Group chats that actually help
+            </h1>
+            <p className="text-lg text-gray-500 mb-8 leading-relaxed">
+              Join university group chats for your classes. Get help with coursework, 
+              collaborate on projects, and build your academic community.
+            </p>
+          </div>
 
-                                    {/* Input */}
-                                    <input
-                                        type="text"
-                                        value={query}
-                                        onChange={e => {setQuery(e.target.value); setShowSuggestions(true);}}
-                                        className="pl-10 px-3 py-3 w-full text-lg text-gray-900 bg-gray-50 border border-gray-300 rounded-l-lg focus:ring-gray-500 focus:border-gray-500"
-                                        placeholder="Search your university..."
-                                        required
-                                    />
-                                    {showSuggestions && query && (
-                                        <ul className="absolute top-full left-0 right-0 rounded-lg bg-white border border-gray-200 shadow">
-                                        {filtered.length > 0 ? (
-                                            filtered.map(u => (
-                                            <li
-                                                key={u}
-                                                className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                                                onClick={() => {setQuery(u); setShowSuggestions(false);}}
-                                            >
-                                                {u}
-                                            </li>
-                                            ))
-                                        ) : (
-                                            <li className="px-3 py-2 text-gray-500">No match</li>
-                                        )}
-                                        </ul>
-                                    )}
-                                </div>
-
-                                {/* Search button */}
-                                <button
-                                type="submit"
-                                className="px-4 py-3 text-sm font-medium text-black bg-gray-200 rounded-r-lg border border-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300"
-                                >
-                                <svg
-                                    className="w-4 h-4"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 20 20"
-                                >
-                                    <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                                    />
-                                </svg>
-                                <span className="sr-only">Search</span>
-                                </button>
-                            </div>
-                        </form>
-                        <button onClick={() => navigate("/login")} className="flex justify-center w-[90%] items-center gap-2 text-lg text-white bg-black py-2 px-5 rounded-lg hover hover:bg-gray-800">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            </svg>
-
-                            Sync with Canvas
-                        </button>
+          {/* Search Section */}
+          <div className="max-w-5xl mx-auto mb-20">
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* University Search */}
+              <div className="border border-gray-200 bg-white rounded-xl shadow-md">
+                <div className="p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="h-10 w-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                      <GraduationCap className="h-5 w-5 text-primary" />
                     </div>
-                    <div className="w-1/2 flex flex-col gap-5 items-center">
-                        <form className="w-[90%]">
-                            <div className="flex w-full">
-                                {/* Input wrapper */}
-                                <div className="relative flex flex-1">
-                                    {/* Icon */}
-                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <svg 
-                                            xmlns="http://www.w3.org/2000/svg" 
-                                            fill="none" 
-                                            viewBox="0 0 24 24" 
-                                            strokeWidth={1.5} 
-                                            stroke="currentColor" 
-                                            className="w-6 h-6">
-                                        <path 
-                                            strokeLinecap="round" 
-                                            strokeLinejoin="round" 
-                                            d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
-                                        </svg>
-
-                                    </span>
-
-                                    {/* Input */}
-                                    <input
-                                        type="search"
-                                        id="search-dropdown"
-                                        className="pl-10 pr-3 py-3 w-full text-lg text-gray-900 bg-gray-50 border border-gray-300 rounded-l-lg focus:ring-gray-500 focus:border-gray-500"
-                                        placeholder="Search your classes..."
-                                        required
-                                    />
-                                </div>
-
-                                {/* Search button */}
-                                <button
-                                    type="submit"
-                                    className="px-4 py-2.5 text-sm font-medium text-black bg-gray-200 rounded-r-lg border border-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300"
-                                    >
-                                    <svg
-                                        className="w-4 h-4"
-                                        aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 20 20"
-                                    >
-                                        <path
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                                        />
-                                    </svg>
-                                    <span className="sr-only">Search</span>
-                                </button>
-                            </div>
-                        </form>
-                        <button onClick={() => navigate("/login")} className="flex justify-center w-[90%] items-center gap-2 text-lg bg-black text-white py-2 px-5 rounded-lg hover hover:bg-gray-800">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
-                            </svg>
-
-
-                            Join Group Chat
-                        </button>
+                    <div>
+                      <h3 className="font-semibold text-black">Find Your University</h3>
+                      <p className="text-sm text-gray-500">Search for your school</p>
                     </div>
+                  </div>
+                  
+                  <form onSubmit={handleUniversitySearch} className="space-y-4">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 " />
+                      <input
+                        type="text"
+                        value={universityQuery}
+                        onChange={(e) => {
+                          setUniversityQuery(e.target.value);
+                          setShowUniversitySuggestions(true);
+                        }}
+                        placeholder="Search your university..."
+                        className="w-full pl-10 pr-4 py-2 bg-gray-50 text-sm border border-gray-200 rounded-md"
+                      />
+                      {showUniversitySuggestions && universityQuery && (
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50">
+                          {filteredUniversities.length > 0 ? (
+                            filteredUniversities.map((university) => (
+                              <button
+                                key={university}
+                                type="button"
+                                className="w-full text-left px-4 py-2 hover:bg-accent hover:text-accent-foreground text-sm"
+                                onClick={() => handleUniversitySelect(university)}
+                              >
+                                {university}
+                              </button>
+                            ))
+                          ) : (
+                            <div className="px-4 py-2 text-sm text-muted-foreground">
+                              No universities found
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    
+                    <button
+                      type="button"
+                      onClick={() => navigate("/login")}
+                      className="w-full bg-black text-white hover:bg-gray-800 cursor-pointer px-4 py-2 rounded-lg text-sm  flex items-center justify-center"
+                    >
+                      <Settings className="mr-2 h-4 w-4" />
+                      Sync with Canvas
+                    </button>
+                  </form>
                 </div>
+              </div>
+
+              {/* Class Search */}
+              <div className="border border-gray-200 bg-white rounded-xl shadow-md">
+                <div className="p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="h-10 w-10 rounded-lg flex items-center justify-center">
+                      <BookOpen className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-black">Find Your Classes</h3>
+                      <p className="text-sm text-gray-500">Connect with classmates</p>
+                    </div>
+                  </div>
+                  
+                  <form onSubmit={handleClassSearch} className="space-y-4">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+                      <input
+                        type="text"
+                        value={classQuery}
+                        onChange={(e) => setClassQuery(e.target.value)}
+                        placeholder="Search your classes..."
+                        className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm"
+                      />
+                    </div>
+                    
+                    <button
+                      type="button"
+                      onClick={() => navigate("/login")}
+                      className="w-full border border-gray-200 cursor-pointer text-sm bg-gray-50 text-black hover:bg-gray-200 px-4 py-2 rounded-lg flex items-center justify-center"
+                    >
+                      <Users className="mr-2 h-4 w-4" />
+                      Join Group Chat
+                    </button>
+                  </form>
+                </div>
+              </div>
             </div>
-            <div className="row-start-4 col-start-1 px-9 border-slate-300 pb-12">
-                <p className="text-slate-600 text-lg">
-                    A platform where students can enter their university and class to join a community group chat for extra assistance with coursework and studying.
+          </div>
+
+          {/* Features Section */}
+          <div className="max-w-4xl mx-auto text-center mb-20">
+            <h2 className="text-2xl font-bold text-foreground mb-4">
+              Why choose Unichat?
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8 mt-12">
+              <div className="text-center bg-white border border-gray-200 rounded-xl shadow-md p-6">
+                <div className="h-16 w-16 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-8 w-8 text-black" />
+                </div>
+                <h3 className="font-semibold text-black mb-2">Connect</h3>
+                <p className="text-gray-500 text-sm">
+                  Find classmates and build study groups for better learning outcomes
                 </p>
+              </div>
+              <div className="text-center bg-white border border-gray-200 rounded-xl shadow-md p-6">
+                <div className="h-16 w-16 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <BookOpen className="h-8 w-8 text-black" />
+                </div>
+                <h3 className="font-semibold text-black mb-2">Learn</h3>
+                <p className="text-gray-500 text-sm">
+                  Get help with coursework and share knowledge with peers
+                </p>
+              </div>
+              <div className="text-center bg-white border border-gray-200 rounded-xl shadow-md p-6">
+                <div className="h-16 w-16 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <GraduationCap className="h-8 w-8 text-black" />
+                </div>
+                <h3 className="font-semibold text-black mb-2">Succeed</h3>
+                <p className="text-gray-500 text-sm">
+                  Improve your academic performance through collaboration
+                </p>
+              </div>
             </div>
-            <div className="row-start-5 col-span-2 border-slate-300">
-                <Footer />
+          </div>
+
+          {/* CTA Section */}
+          <div className="text-center">
+            <div className="rounded-2xl p-12 max-w-2xl mx-auto">
+              <h2 className="text-2xl font-bold text-foreground mb-4">
+                Ready to get started?
+              </h2>
+              <p className="text-gray-500 mb-8 text-md">
+                Join thousands of students already using Unichat to succeed in their studies
+              </p>
+              <button
+                onClick={() => navigate("/login")}
+                className="bg-black text-white hover:bg-gray-800 px-6 py-3 rounded-md text-md cursor-pointer flex items-center justify-center mx-auto"
+              >
+                Get Started Now
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </button>
             </div>
+          </div>
         </div>
-    )
-};
+      </main>
+
+      <Footer />
+    </div>
+  );
+}
