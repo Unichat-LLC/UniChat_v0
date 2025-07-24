@@ -99,50 +99,53 @@ const ContactUs = () => {
                             Fill out the form below and we'll get back to you within 24 hours.
                         </p>
                     </div>
-                    <div className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <label htmlFor="firstName">First Name</label>
-                                <input id="firstName" placeholder="Enter your first name" />
+                    <div className="space-y-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div className="space-y-2 flex flex-col">
+                                <label htmlFor="firstName" className="font-semibold">First Name</label>
+                                <input id="firstName" placeholder="Enter your first name" className="border border-gray-200 p-2 rounded-lg" />
                             </div>
-                            <div className="space-y-2">
-                                <label htmlFor="lastName">Last Name</label>
-                                <input id="lastName" placeholder="Enter your last name" />
+                            <div className="space-y-2 flex flex-col">
+                                <label htmlFor="lastName" className="font-semibold">Last Name</label>
+                                <input id="lastName" placeholder="Enter your last name" className="border border-gray-200 p-2 rounded-lg" />
                             </div>
                         </div>
                     
-                        <div className="space-y-2">
-                            <label htmlFor="email">Email</label>
-                            <input id="email" type="email" placeholder="Enter your email address" />
+                        <div className="space-y-2 text-sm flex flex-col">
+                            <label htmlFor="email" className="font-semibold ">Email</label>
+                            <input id="email" type="email" placeholder="Enter your email address" className="border border-gray-200 p-2 rounded-lg" />
                         </div>
                     
-                        <div className="space-y-2">
-                            <label htmlFor="subject">Subject</label>
-                            <input id="subject" placeholder="What is this regarding?" />
+                        <div className="space-y-2 text-sm flex flex-col">
+                            <label htmlFor="subject" className="font-semibold">Subject</label>
+                            <input id="subject" placeholder="What is this regarding?" className="border border-gray-200 p-2 rounded-lg" />
                         </div>
                     
-                        <div className="space-y-2">
-                            <label htmlFor="message">Message</label>
+                        <div className="space-y-2 text-sm flex flex-col">
+                            <label htmlFor="message" className="font-semibold">Message</label>
                             <textarea 
                             id="message" 
                             placeholder="Tell us more about your inquiry..."
-                            className="min-h-[120px]"
+                            className="min-h-[120px] border border-gray-200 p-2 rounded-lg"
                             />
                         </div>
-                        
-                        <div>
-                            Send Message
+
+                        <div className="flex justify-center">
+                            <button className="text-md bg-black text-white py-2 px-4 rounded-lg font-semibold">
+                                Send Message
+                            </button>
                         </div>
+                        
                     </div>
                 </div>
 
                 {/* Office Locations */}
                 <div className="space-y-6">
                     <div>
-                    <h2 className="text-2xl font-bold text-foreground mb-4">
+                    <h2 className="text-xl font-bold text-black mb-4">
                         Office Locations
                     </h2>
-                    <p className="text-muted-foreground mb-6">
+                    <p className="text-gray-500 mb-6">
                         Visit us at one of our office locations or reach out through any of our digital channels.
                     </p>
                     </div>
@@ -150,21 +153,21 @@ const ContactUs = () => {
                     <div className="space-y-4">
                     {offices.map((office, index) => (
                         <div key={index}>
-                        <div className="pt-6">
-                            <div className="flex items-start space-x-3">
-                            <MapPin className="h-5 w-5 text-muted-foreground mt-1 flex-shrink-0" />
-                            <div>
-                                <h3 className="text-lg font-semibold text-foreground mb-2">
-                                {office.city}
-                                </h3>
-                                <p className="text-muted-foreground text-sm mb-2 leading-relaxed">
-                                {office.address}
-                                </p>
-                                <div className="flex items-center space-x-2">
-                                <Phone className="h-4 w-4 text-muted-foreground" />
-                                <span className="text-foreground text-sm">{office.phone}</span>
+                        <div className="">
+                            <div className="flex items-start space-x-3 bg-white border border-gray-200 rounded-lg p-8 shadow-md">
+                                <MapPin className="h-5 w-5 text-gray-500 mt-1 flex-shrink-0" />
+                                <div>
+                                    <h3 className="text-md font-semibold text-black mb-2">
+                                    {office.city}
+                                    </h3>
+                                    <p className="text-gray-500 text-sm mb-2 leading-relaxed">
+                                    {office.address}
+                                    </p>
+                                    <div className="flex items-center space-x-2">
+                                    <Phone className="h-4 w-4 text-gray-500" />
+                                    <span className="text-black text-sm">{office.phone}</span>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                         </div>
                         </div>
@@ -172,52 +175,52 @@ const ContactUs = () => {
                     </div>
 
                     {/* Business Hours */}
-                    <div>
-                    <div>
-                        <div className="flex items-center space-x-2">
-                        <Clock className="h-5 w-5 text-foreground" />
-                        <h1 className="text-lg">Business Hours</h1>
+                    <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-md space-y-4">
+                        <div>
+                            <div className="flex items-center space-x-2">
+                            <Clock className="h-4 w-4 text-black" />
+                            <h1 className="text-md font-semibold">Business Hours</h1>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                            <span className="text-muted-foreground">Monday - Friday</span>
-                            <span className="text-foreground">9:00 AM - 6:00 PM EST</span>
+                        <div>
+                            <div className="space-y-2 text-sm">
+                            <div className="flex justify-between">
+                                <span className="text-gray-500">Monday - Friday</span>
+                                <span className="text-black">9:00 AM - 6:00 PM EST</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-gray-500">Saturday</span>
+                                <span className="text-black">10:00 AM - 4:00 PM EST</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-gray-500">Sunday</span>
+                                <span className="text-black">Closed</span>
+                            </div>
+                            </div>
                         </div>
-                        <div className="flex justify-between">
-                            <span className="text-muted-foreground">Saturday</span>
-                            <span className="text-foreground">10:00 AM - 4:00 PM EST</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-muted-foreground">Sunday</span>
-                            <span className="text-foreground">Closed</span>
-                        </div>
-                        </div>
-                    </div>
                     </div>
                 </div>
             </div>
 
             {/* Emergency Support */}
-            <div className="text-center">
-            <div>
-                <h1 className="text-2xl">Need Urgent Help?</h1>
-            </div>
-            <div>
-                <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                For critical issues affecting your educational activities, our emergency support team 
-                is available 24/7 to ensure minimal disruption to your learning experience.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <div className="outline">
-                    Call Emergency Line: +1 (555) 911-HELP
+            <div className="text-center bg-white border border-gray-200 rounded-xl p-8 shadow-md space-y-5">
+                <div>
+                    <h1 className="text-xl font-semibold">Need Urgent Help?</h1>
                 </div>
                 <div>
-                    Start Live Chat
+                    <p className="text-gray-500 text-md mb-6 max-w-2xl mx-auto">
+                    For critical issues affecting your educational activities, our emergency support team 
+                    is available 24/7 to ensure minimal disruption to your learning experience.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button className="cursor-pointer border border-gray-200 rounded-lg p-2 text-sm font-semibold">
+                            Call Emergency Line: +1 (555) 911-HELP
+                        </button>
+                        <button className="bg-black text-white py-2 px-3 rounded-lg text-sm font-semibold">
+                            Start Live Chat
+                        </button>
+                    </div>
                 </div>
-                </div>
-            </div>
             </div>
         </div>
     </div>
