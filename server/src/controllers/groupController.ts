@@ -48,9 +48,7 @@ export const getGroups = async(req: Request, res: Response) => {
 
     const groups= await GroupModel.getGroupsForUser(userId);
 
-    if(!groups){
-        res.json({groups});
-    }
+    res.json({groups})
 }
 
 // join a group

@@ -47,7 +47,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
       console.error("Failed to fetch groups:", error);
       // Don't throw error, just log it so Dashboard can still render
     }
-  }, [activeGroup]);
+  }, []);
 
   // 2) Fetch members & messages
   const getGroupMembers = useCallback(async (groupId: number) => {
@@ -60,7 +60,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
       console.error("Failed to fetch group members:", error);
       setMembers([]); // Set empty array on error
     }
-  }, []);
+  }, [getGroups]);
 
   const getMessages = useCallback(async (groupId: number) => {
     try {
@@ -129,7 +129,6 @@ export function ChatProvider({ children }: ChatProviderProps) {
     getMessages(activeGroup.id);
   }, [activeGroup, getGroupMembers, getMessages]);
 
-  // On mount, load your groups
   useEffect(() => {
     getGroups();
   }, [getGroups]);

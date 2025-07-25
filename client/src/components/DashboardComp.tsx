@@ -95,15 +95,6 @@ const ChatDashboard: React.FC = () => {
                 </div>
               ))}
             </div>
-            <button
-              onClick={async () => {
-                await logout();
-                navigate('/login', { replace: true });
-              }}
-              className="mt-4 flex items-center gap-2 text-red-600"
-            >
-              <ArrowRightFromLine /> Sign Out
-            </button>
           </div>
 
           <div className="p-4 border-t border-gray-200">

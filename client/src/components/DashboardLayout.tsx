@@ -9,23 +9,31 @@ export default function DashboardLayout() {
   useEffect(() => {
     if (!user) return;
     
+    let isConnecting = false;
+    
     try {
+      if (isConnecting) return; // Prevent multiple connection attempts
+      isConnecting = true;
+      
       const sock = initSocket(user.id);
       
       sock.on("connect", () => {
         console.log("Socket connected successfully");
+        isConnecting = false;
       });
       
       sock.on("connect_error", (error) => {
         console.error("Socket connection error:", error);
-        // Don't prevent the Dashboard from loading even if socket fails
+        isConnecting = false;
       });
       
       sock.on("disconnect", (reason) => {
         console.log("Socket disconnected:", reason);
+        isConnecting = false;
       });
       
       return () => { 
+        isConnecting = false;
         sock.off("connect");
         sock.off("connect_error");
         sock.off("disconnect");
@@ -33,9 +41,10 @@ export default function DashboardLayout() {
       };
     } catch (error) {
       console.error("Failed to initialize socket:", error);
-      // Don't prevent the Dashboard from loading
+      isConnecting = false;
     }
   }, [user]);
+
 
   return (
     <div className="bg-white min-h-screen">
