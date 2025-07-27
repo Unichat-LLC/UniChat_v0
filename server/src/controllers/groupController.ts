@@ -45,9 +45,7 @@ export const leaveGroup = async (req: Request, res: Response) => {
 // Get all the groups a user is in
 export const getGroups = async(req: Request, res: Response) => {
     const userId = req.user!.id; //Get user ID from request
-
     const groups= await GroupModel.getGroupsForUser(userId);
-
     res.json({groups})
 }
 
