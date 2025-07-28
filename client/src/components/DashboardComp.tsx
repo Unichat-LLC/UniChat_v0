@@ -27,16 +27,13 @@ const ChatDashboard: React.FC = () => {
     members,
     messages,
     setActiveGroup,
-    sendMessage,
-    createGroup
+    sendMessage
   } = useChat();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [messageText, setMessageText] = useState('');
-  const [newName, setNewName] = useState("");
-  const [newDesc, setNewDesc] = useState("");
 
   const [showModal, setShowModal] = useState(false);
 
@@ -54,11 +51,6 @@ const ChatDashboard: React.FC = () => {
       default:       return 'bg-gray-400';
     }
   };
-
-  async function handleCreate() {
-    await createGroup(newName, newDesc);
-    setShowModal(false);
-  }
 
   useEffect(() => {
     // Scroll to bottom when messages changes
@@ -187,11 +179,6 @@ const ChatDashboard: React.FC = () => {
           <CreateGroupModal
             show={showModal}
             onClose={() => setShowModal(false)}
-            onCreate={handleCreate}
-            newName={newName}
-            setNewName={setNewName}
-            newDesc={newDesc}
-            setNewDesc={setNewDesc}
           />
           {/* Input */}
           <div className="p-4 border-t border-gray-200 flex items-center space-x-3">
