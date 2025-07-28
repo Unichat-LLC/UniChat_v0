@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import { Search, GraduationCap, Users, Settings, BookOpen, ArrowRight } from "lucide-react";
+import CreateGroupModal from "../components/CreateOrJoinGroupModal";
 
 export function LandingPage() {
   const navigate = useNavigate();
@@ -37,6 +38,15 @@ export function LandingPage() {
     e.preventDefault();
     // Handle class search logic
   };
+
+  const [newName, setNewName] = useState("");
+  const [newDesc, setNewDesc] = useState("");
+
+  const [showModal, setShowModal] = useState(true);
+
+  const handleCreate = () => {
+
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -214,6 +224,17 @@ export function LandingPage() {
               </button>
             </div>
           </div>
+
+          <CreateGroupModal
+            show={showModal}
+            onClose={() => setShowModal(false)}
+            onCreate={handleCreate}
+            newName={newName}
+            setNewName={setNewName}
+            newDesc={newDesc}
+            setNewDesc={setNewDesc}
+          />
+
         </div>
       </main>
 
