@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Search,
   Settings,
@@ -30,6 +30,8 @@ const ChatDashboard: React.FC = () => {
     createGroup
   } = useChat();
 
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [messageText, setMessageText] = useState('');
   const [newName, setNewName] = useState("");
@@ -56,6 +58,13 @@ const ChatDashboard: React.FC = () => {
     await createGroup(newName, newDesc);
     setShowModal(false);
   }
+
+  useEffect(() => {
+    // Scroll to bottom when messages changes
+    if(messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({behavior: "smooth"});
+    }
+  },[messages]);
 
   return (
     <div className="h-screen bg-white flex">
@@ -171,6 +180,7 @@ const ChatDashboard: React.FC = () => {
                   </div>
                 );
               })}
+              <div ref={messagesEndRef} />
             </div>
           </div>
           {showModal && (

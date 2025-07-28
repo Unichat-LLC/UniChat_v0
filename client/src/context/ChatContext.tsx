@@ -82,7 +82,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
           `/groups/${groupId}/messages`,
           { message: content }
         );
-        setMessages((msgs) => [res.data.newMessage, ...msgs]);
+        await getMessages(groupId);
       } catch (error) {
         console.error("Failed to send message:", error);
       }
