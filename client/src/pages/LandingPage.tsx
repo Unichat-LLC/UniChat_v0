@@ -89,7 +89,7 @@ export function LandingPage() {
                         className="w-full pl-10 pr-4 py-2 bg-gray-50 text-sm border border-gray-200 rounded-md"
                       />
                       {showUniversitySuggestions && universityQuery && (
-                        <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50">
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-500 rounded-md shadow-lg z-50">
                           {filteredUniversities.length > 0 ? (
                             filteredUniversities.map((university) => (
                               <button

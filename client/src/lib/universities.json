@@ -1,8 +1,8 @@
-[
-    {
-        "institution": "University of Cincinnati"
+{
+    "University of Cincinnati": {
+        "id": 1
     },
-    {
-        "institution": "Ohio State University"
+    "Ohio State University": {
+        "id": 2
     }
-]
+}

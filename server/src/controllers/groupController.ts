@@ -81,3 +81,14 @@ export const joinGroup = async (req: Request, res: Response) => {
   // Return the new member record (or you could return the full member list)
   res.status(201).json({ newMember });
 };
+
+// get all groups
+export const getAllGroups = async(req: Request, res: Response) => {
+  try {
+    const groups = await GroupModel.getAllGroups();
+    res.json({ groups });
+  } catch (err) {
+    console.error("Failed to get all groups:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}

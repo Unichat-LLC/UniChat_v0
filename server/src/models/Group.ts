@@ -100,6 +100,11 @@ export const GroupModel = {
         );
     },
 
+    async getAllGroups(): Promise<Group[]> {
+        return query<Group>(
+            `SELECT * FROM groups`
+        );
+    },
 
     // Update methods
     async updateGroup(id: number, data: updateGroup): Promise<Group | null> {

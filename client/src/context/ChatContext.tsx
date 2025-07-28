@@ -22,7 +22,8 @@ interface ChatContextValue {
   getMessages: (groupId: number) => Promise<void>;
   sendMessage: (groupId: number, content: string) => Promise<void>;
   createGroup: (name: string, description: string) => Promise<void>;
-  joinGroup: (groupId: number) => Promise<void>;   // if you want a "join" flow
+  joinGroup: (groupId: number) => Promise<void>;
+  getAllGroups: () => Promise<void>;
 }
 
 const ChatContext = createContext<ChatContextValue | undefined>(undefined);
@@ -31,6 +32,7 @@ type ChatProviderProps = { children: ReactNode };
 
 export function ChatProvider({ children }: ChatProviderProps) {
   const [groups, setGroups] = useState<Group[]>([]);
+  const [allGroups, setAllGroups] = useState<Group[]>([]);
   const [activeGroup, setActiveGroup] = useState<Group | null>(null);
   const [members, setMembers] = useState<GroupMember[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -122,6 +124,16 @@ export function ChatProvider({ children }: ChatProviderProps) {
     }
   }, [activeGroup, getGroups, getGroupMembers]);
 
+  // 6) Get all groups
+  const getAllGroups = useCallback(async () => {
+    try {
+      const res = await api.get<{ allGroups: Group[] }>("/groups/all");
+      setAllGroups(res.data.allGroups);
+    } catch (error) {
+      console.error("Failed to fetch all groups:", error);
+    }
+  },[])
+
   // Whenever activeGroup changes, re-fetch its members & messages
   useEffect(() => {
     if (!activeGroup) return;
@@ -146,6 +158,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
       sendMessage,
       createGroup,
       joinGroup,
+      getAllGroups
     }),
     [
       groups,
@@ -158,6 +171,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
       sendMessage,
       createGroup,
       joinGroup,
+      getAllGroups
     ]
   );
 
