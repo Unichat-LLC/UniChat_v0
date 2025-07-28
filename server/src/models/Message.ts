@@ -23,8 +23,8 @@ export const MessageModel = {
     async createMessage(data: newMessage): Promise<Message> {
         const params = [data.group_id, data.sender_id, data.message];
         const sql = `
-            INSERT INTO messages (group_id, sender_id, message)
-            VALUES ($1, $2, $3);
+            INSERT INTO messages (group_id, sender_id, message, uploaded_at)
+            VALUES ($1, $2, $3, NOW())
             RETURNING *;
         `;
         const [m] = await query<Message>(sql, params);

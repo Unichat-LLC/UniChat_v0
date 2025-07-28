@@ -80,7 +80,7 @@ export const GroupModel = {
 
     async getGroupMessagesById(groupId: number): Promise<Message[]> {
         return query<Message>(`
-            SELECT * FROM messages WHERE group_id = $1 ORDER BY uploaded_at DESC;
+            SELECT * FROM messages WHERE group_id = $1 ORDER BY uploaded_at ASC;
         `, [groupId]);
     },
 

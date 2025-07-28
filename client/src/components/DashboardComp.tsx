@@ -98,7 +98,7 @@ const ChatDashboard: React.FC = () => {
           </div>
 
           <div className="p-4 border-t border-gray-200">
-            <button className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-gray-200">
+            <button className="w-full flex items-center text-sm gap-3 p-2 rounded-xl hover:bg-gray-200">
               <Settings className="w-4 h-4" />
               Settings
             </button>
@@ -265,7 +265,7 @@ const ChatDashboard: React.FC = () => {
             <div className="flex items-center space-x-3">
               <img src={placeholder} className="w-10 h-10 rounded-full" />
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900">{user?.username}</h3>
+                <h3 className="font-semibold text-md text-gray-900">{user?.username}</h3>
                 <p className="text-[0.85rem] text-gray-500">{user?.university}</p>
               </div>
               <MoreVertical className="w-4 h-4 text-gray-600 hover:text-gray-800 cursor-pointer" />
@@ -273,7 +273,7 @@ const ChatDashboard: React.FC = () => {
             <div className="mt-4 flex gap-4">
               <button
                 onClick={() => navigate('/profile')}
-                className="flex-1 p-2 bg-white rounded-xl text-center hover:bg-gray-200"
+                className="flex-1 p-2 bg-white border border-gray-200 rounded-xl text-sm text-center hover:bg-gray-200"
               >
                 Profile
               </button>
@@ -284,7 +284,7 @@ const ChatDashboard: React.FC = () => {
                 }}
                 className="p-2 rounded-xl text-gray-700 hover:bg-gray-200"
               >
-                <ArrowRightFromLine />
+                <ArrowRightFromLine  className='w-4 h-4'/>
               </button>
             </div>
           </div>

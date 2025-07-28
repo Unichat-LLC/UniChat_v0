@@ -30,6 +30,8 @@ export const getUserMessages = async(req: Request, res: Response) => {
 
 // send a message in a group
 export const sendMessage = async(req: Request, res: Response) => {
+    if (!req.user) return res.status(401).json({ error: "Not authenticated" });
+    if (!req.group) return res.status(404).json({ error: "Group not found" });
     const { message } = req.body;
     const newMessage = await MessageModel.createMessage({
         group_id: req.group!.id,
