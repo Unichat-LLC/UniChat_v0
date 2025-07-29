@@ -105,7 +105,7 @@ app.patch("/api/profile", requireAuth, updateProfile);
 app.get("/api/groups/:groupId/members", requireAuth, requireGroup, getGroupMembers);
 app.post("/api/groups", requireAuth, createGroup);
 app.get("/api/groups", requireAuth, getGroups);
-app.get("/api/groups/all", requireAuth, getAllGroups)
+app.get("/api/groups/all", getAllGroups)
 app.post("/api/groups/:groupId/join", requireAuth, requireGroup, joinGroup);
 app.delete("/api/groups/:groupId/leave", requireAuth, requireGroup, leaveGroup);
 

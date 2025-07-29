@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useChat } from "../context/ChatContext";
 import universitiesData from "../lib/universities.json";
 import { Search } from "lucide-react";
-import type { Group } from "../lib/DataTypes";
 
 interface GroupModalProps {
   show: boolean;
@@ -10,7 +9,7 @@ interface GroupModalProps {
 }
 
 const CreateGroupModal: React.FC<GroupModalProps> = ({ show, onClose }) => {
-  const { createGroup, joinGroup, getAllGroups } = useChat();
+  const { createGroup, joinGroup, getAllGroups, allGroups } = useChat();
 
   const [activeTab, setActiveTab] = useState<"create" | "join">("join");
   const [newName, setNewName] = useState("");
@@ -18,7 +17,6 @@ const CreateGroupModal: React.FC<GroupModalProps> = ({ show, onClose }) => {
   const [universityQuery, setUniversityQuery] = useState("");
   const [showUniversitySuggestions, setShowUniversitySuggestions] = useState(false);
 
-  const [allGroups, setAllGroups] = useState<Group[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
   const [classQuery, setClassQuery] = useState("");
   const [showClassSuggestions, setShowClassSuggestions] = useState(false);
@@ -57,11 +55,6 @@ const CreateGroupModal: React.FC<GroupModalProps> = ({ show, onClose }) => {
   useEffect(() => {
     if (show) {
       getAllGroups()
-        .then(() =>
-          fetch("/api/groups/all")
-            .then((res) => res.json())
-            .then((data) => setAllGroups(data.groups))
-        )
         .catch((err) => console.error("Failed to fetch groups:", err));
     }
   }, [show, getAllGroups]);
@@ -109,7 +102,7 @@ const CreateGroupModal: React.FC<GroupModalProps> = ({ show, onClose }) => {
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   placeholder="Enter a name"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border bg-gray-50 text-sm border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
@@ -119,7 +112,7 @@ const CreateGroupModal: React.FC<GroupModalProps> = ({ show, onClose }) => {
                   onChange={(e) => setNewDesc(e.target.value)}
                   placeholder="Enter a description"
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 bg-gray-50 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>

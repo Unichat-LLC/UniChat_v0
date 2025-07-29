@@ -16,6 +16,7 @@ interface ChatContextValue {
   activeGroup: Group | null;
   members: GroupMember[];
   messages: Message[];
+  allGroups: Group[];
   setActiveGroup: (g: Group) => void;
   getGroups: () => Promise<void>;
   getGroupMembers: (groupId: number) => Promise<void>;
@@ -80,7 +81,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
   const sendMessage = useCallback(
     async (groupId: number, content: string) => {
       try {
-        const res = await api.post<{ newMessage: Message }>(
+        await api.post<{ newMessage: Message }>(
           `/groups/${groupId}/messages`,
           { message: content }
         );
@@ -127,8 +128,8 @@ export function ChatProvider({ children }: ChatProviderProps) {
   // 6) Get all groups
   const getAllGroups = useCallback(async () => {
     try {
-      const res = await api.get<{ allGroups: Group[] }>("/groups/all");
-      setAllGroups(res.data.allGroups);
+      const res = await api.get<{ groups: Group[] }>("/groups/all");
+      setAllGroups(res.data.groups);
     } catch (error) {
       console.error("Failed to fetch all groups:", error);
     }
@@ -151,6 +152,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
       activeGroup,
       members,
       messages,
+      allGroups,
       setActiveGroup,
       getGroups,
       getGroupMembers,
@@ -165,6 +167,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
       activeGroup,
       members,
       messages,
+      allGroups,
       getGroups,
       getGroupMembers,
       getMessages,
