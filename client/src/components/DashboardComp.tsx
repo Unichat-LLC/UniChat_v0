@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useChat } from '../context/ChatContext';
 import CreateGroupModal from './CreateOrJoinGroupModal';
+import { initSocket } from '../lib/socket';
 
 const ChatDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -27,7 +28,8 @@ const ChatDashboard: React.FC = () => {
     members,
     messages,
     setActiveGroup,
-    sendMessage
+    sendMessage,
+    getMessages
   } = useChat();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -57,6 +59,7 @@ const ChatDashboard: React.FC = () => {
     if(messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({behavior: "smooth"});
     }
+    
   },[messages]);
 
   return (
