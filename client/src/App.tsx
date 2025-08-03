@@ -40,6 +40,7 @@ function App() {
                 </ChatProvider>
               } 
             />
+            
             <Route element={<DashboardLayout />}>
               <Route 
                 path="dashboard" 
