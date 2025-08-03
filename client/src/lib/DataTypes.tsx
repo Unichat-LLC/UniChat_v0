@@ -41,6 +41,7 @@ export interface GroupMember {
     role: string;
     is_active: boolean;
     joined_at: Date;
+    user: User;
 }
 
 export interface Message{

@@ -60,6 +60,9 @@ const ChatDashboard: React.FC = () => {
     
   },[messages]);
 
+  
+  console.log("members", members);
+
   return (
     <div className="h-screen bg-white flex">
         {/* Left Sidebar */}
@@ -254,7 +257,7 @@ const ChatDashboard: React.FC = () => {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">User {mem.user_id}</p>
+                    <p className="text-sm font-medium truncate">{mem["user.username"] ?? "Unknown"}</p>
                     <p className="text-xs text-gray-500 capitalize">
                       {mem.is_active ? 'online' : 'away'}
                     </p>

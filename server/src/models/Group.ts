@@ -17,7 +17,19 @@ export interface GroupMember {
     role: string;
     is_active: boolean;
     joined_at: Date;
+    user: User;
 }
+
+export interface User {
+    id: number;
+    username: string;
+    email: string;
+    name: string;
+    bio: string | null;
+    university: string;
+    created_at: Date;
+}
+
 
 type newGroup = Pick<Group,  "name" | "description">;
 type newGroupMember = Pick<GroupMember, "group_id" | "user_id" | "role">;
@@ -84,9 +96,25 @@ export const GroupModel = {
         `, [groupId]);
     },
 
-    async getGroupMembersByGroup(groupId: number): Promise<GroupMember[]> {
-        return query<GroupMember>(`
-            SELECT * FROM group_members WHERE group_id = $1;
+    async getGroupMembersByGroup(groupId: number): Promise<(GroupMember & { user: User })[]> {
+        return query<(GroupMember & { user: User })>(`
+            SELECT 
+                gm.id,
+                gm.group_id,
+                gm.user_id,
+                gm.role,
+                gm.is_active,
+                gm.joined_at,
+                u.id AS "user.id",
+                u.username AS "user.username",
+                u.email AS "user.email",
+                u.name AS "user.name",
+                u.bio AS "user.bio",
+                u.university AS "user.university",
+                u.created_at AS "user.created_at"
+            FROM group_members gm
+            JOIN users u ON gm.user_id = u.id
+            WHERE gm.group_id = $1;
         `, [groupId]);
     },
     
