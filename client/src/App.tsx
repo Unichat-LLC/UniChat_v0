@@ -41,7 +41,11 @@ function App() {
               } 
             />
             
-            <Route element={<DashboardLayout />}>
+            <Route element={
+              <ChatProvider>
+                <DashboardLayout />
+              </ChatProvider>
+              }>
               <Route 
                 path="dashboard" 
                 element={
