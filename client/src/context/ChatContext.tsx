@@ -55,10 +55,29 @@ export function ChatProvider({ children }: ChatProviderProps) {
   // 2) Fetch members & messages
   const getGroupMembers = useCallback(async (groupId: number) => {
     try {
-      const res = await api.get<{ groupMembers: GroupMember[] }>(
+      // The backend returns dotted keys for joined user fields (e.g., "user.username").
+      // Normalize them into the typed GroupMember shape with a nested `user` object.
+      const res = await api.get<{ groupMembers: any[] }>(
         `/groups/${groupId}/members`
       );
-      setMembers(res.data.groupMembers);
+      const normalized: GroupMember[] = res.data.groupMembers.map((m: any) => ({
+        id: m.id,
+        group_id: m.group_id,
+        user_id: m.user_id,
+        role: m.role,
+        is_active: m.is_active,
+        joined_at: m.joined_at,
+        user: {
+          id: m["user.id"],
+          username: m["user.username"],
+          email: m["user.email"],
+          name: m["user.name"],
+          bio: m["user.bio"],
+          university: m["user.university"],
+          created_at: m["user.created_at"],
+        },
+      }));
+      setMembers(normalized);
     } catch (error) {
       console.error("Failed to fetch group members:", error);
       setMembers([]); // Set empty array on error
