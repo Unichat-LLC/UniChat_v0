@@ -261,6 +261,7 @@ const ChatDashboard: React.FC = () => {
                     <p className="text-xs text-gray-500 capitalize">
                       {mem.is_active ? 'online' : 'away'}
                     </p>
+                    
                   </div>
                 </div>
               ))}
