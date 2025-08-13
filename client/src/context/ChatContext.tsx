@@ -52,6 +52,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
     }
   }, []);
 
+  
   // 2) Fetch members & messages
   const getGroupMembers = useCallback(async (groupId: number) => {
     try {
